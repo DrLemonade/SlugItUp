@@ -16,7 +16,7 @@ public class SlugController : MonoBehaviour
     void Start()
     {
         collectable = false;
-        slugType = new Slug("red", 1, true);
+        slugType = new Slug("red", "red", 1, true);
     }
 
     // Update is called once per frame
@@ -64,6 +64,11 @@ public class SlugController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Collector"))
             collectable = true;
+        if (collision.gameObject.CompareTag("Breeding"))
+        {
+            gameObject.GetComponent<BreedingController>().insertSlug(slugType);
+            Destroy(slug);
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -71,18 +76,29 @@ public class SlugController : MonoBehaviour
         if (collision.gameObject.CompareTag("Collector"))
             collectable = false;
     }
+
+    public void setSlugType(Slug s)
+    {
+        slugType = s;
+    }
 }
 
 public class Slug
 {
-    private string color;
+    private string color1;
+    private string color2;
     private int size;
     private bool wet;
 
-    public Slug(string c, int s, bool w)
+    public Slug(string c1, string c2, int s, bool w)
     {
-        color = c;
+        color1 = c1;
+        color2 = c2;
         size = s;
         wet = w;
     }
+
+    public string getColor1() { return color1; }
+
+    public string getColor2() { return color2; }
 }
