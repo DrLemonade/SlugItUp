@@ -1,0 +1,43 @@
+###
+# Unity folders and files
+###
+SlugItUp/[Aa]ssets/AssetStoreTools*
+SlugItUp/[Bb]uild/
+SlugItUp/[Ll]ibrary/
+SlugItUp/[Ll]ocal[Cc]ache/
+SlugItUp/[Oo]bj/
+SlugItUp/[Tt]emp/
+SlugItUp/[Uu]nityGenerated/
+SlugItUp/[Ll]ogs/
+SlugItUp/[Uu]ser[Ss]ettings/
+# file on crash reports
+sysinfo.txt
+# Unity3D generated meta files
+*.pidb.meta
+
+###
+# VS/MD solution and project files
+###
+[Ee]xportedObj/
+*.booproj
+*.csproj
+*.sln
+*.suo
+*.svd
+*.unityproj
+*.user
+*.userprefs
+*.pidb
+.DS_Store
+
+###
+# OS generated
+###
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
