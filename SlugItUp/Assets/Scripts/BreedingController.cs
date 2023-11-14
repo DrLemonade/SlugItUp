@@ -5,41 +5,50 @@ using UnityEngine;
 public class BreedingController : MonoBehaviour
 {
     public float timer;
+    public float initXVelocity;
+    public float initYVelocity;
     public GameObject slug;
+    public GameObject player;
 
+    private float lastTime;
     private Slug heldSlug1;
     private Slug heldSlug2;
-    private float lastTime;
+    private Slug newSlug;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        heldSlug1 = null;
+        heldSlug2 = null;
+        newSlug = null;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(heldSlug2 != null)
+        if(heldSlug2 != null) // Takes (timer) seconds to finish breeding
         {
             if (Time.time - lastTime >= timer)
             {
-                Slug newSlug = new Slug(heldSlug1.getColor1(), heldSlug2.getColor2(), 1, true);
-                GameObject s = Instantiate(slug);
-                s.GetComponent<SlugController>().setSlugType(newSlug);
-                s.GetComponent<Rigidbody2D>().velocity = new Vector2();
+                newSlug = new Slug(heldSlug1.getColor1(), heldSlug2.getColor2(), 1, true);
+                heldSlug1 = null;
+                heldSlug2 = null;
             }
         }
     }
     
-    public void insertSlug(Slug slug)
+    public void insertSlug(Slug slug) // Inserts slug when collides with Breeder
     {
         if (heldSlug1 == null)
             heldSlug1 = slug;
-        else
+        else if (heldSlug2 == null)
         {
-            heldSlug1 = slug;
+            heldSlug2 = slug;
             lastTime = Time.time;
         }
     }
+
+    public Slug getNewSlug() { return newSlug; } // Returns new slug
+
+    public void setNewSlug() { newSlug = null; } // Gets Breeding ready for next two slugs
 }

@@ -22,10 +22,22 @@ public class SlugController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Friction
-        if(rb.velocity.x > 0) // Friction x pos
+        if(player.heldSlug == null)
         {
-            if (rb.velocity.y < frictionConstant)
+            if (Input.GetKeyDown("e") && collectable)
+            {
+                player.HoldSlug(slugType);
+                Destroy(slug);
+            }
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        // Friction
+        if (rb.velocity.x > 0) // Friction x pos
+        {
+            if (rb.velocity.x < frictionConstant)
                 rb.velocity = new Vector2(0, rb.velocity.y);
             else
                 rb.velocity = new Vector2(rb.velocity.x - frictionConstant, rb.velocity.y);
@@ -39,42 +51,42 @@ public class SlugController : MonoBehaviour
         }
         if (rb.velocity.x < 0) // Friction x neg
         {
-            if (rb.velocity.y < frictionConstant)
+            if (rb.velocity.x > frictionConstant)
                 rb.velocity = new Vector2(0, rb.velocity.y);
             else
                 rb.velocity = new Vector2(rb.velocity.x + frictionConstant, rb.velocity.y);
         }
         if (rb.velocity.y < 0) // Friction y neg
         {
-            if (rb.velocity.y < frictionConstant)
+            if (rb.velocity.y > frictionConstant)
                 rb.velocity = new Vector2(rb.velocity.x, 0);
             else
                 rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + frictionConstant);
-        }
-
-        if (Input.GetKeyDown("e") && collectable && player.heldSlug == null)
-        {
-            Debug.Log("Collection");
-            player.HoldSlug(slugType);
-            Destroy(slug);
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Collector"))
+        if (collision.gameObject.CompareTag("Collector") && player.getTargetSlug() == null)
+        {
             collectable = true;
+            player.setTargetSlug(slug);
+        }
+        
         if (collision.gameObject.CompareTag("Breeding"))
         {
-            gameObject.GetComponent<BreedingController>().insertSlug(slugType);
+            collision.gameObject.GetComponentInParent<BreedingController>().insertSlug(slugType);
             Destroy(slug);
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Collector"))
+        if (collision.gameObject.CompareTag("Collector") && player.getTargetSlug() == slug)
+        {
             collectable = false;
+            player.setTargetSlug(null);
+        }
     }
 
     public void setSlugType(Slug s)
