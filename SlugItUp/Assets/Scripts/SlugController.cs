@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public class SlugController : MonoBehaviour
 {
@@ -17,10 +16,7 @@ public class SlugController : MonoBehaviour
     void Start()
     {
         collectable = false;
-        slugType = new Slug((int) Math.Pow(2, UnityEngine.Random.Range(0, 3)), UnityEngine.Random.Range(1, 4), (UnityEngine.Random.Range(0, 2) == 0));
-        int t = slugType.getType();
-        Color c = (t == 0 ? Color.white : (t == 1 ? Color.red : (t == 2 ? Color.green : Color.blue)));
-        GetComponent<SpriteRenderer>().color = c;
+        slugType = new Slug(Slug.RED, 1, true);
     }
 
     // Update is called once per frame
@@ -84,12 +80,6 @@ public class SlugController : MonoBehaviour
         }
         if (collision.gameObject.CompareTag("Trash"))
         {
-            Destroy(slug);
-        }
-
-        if (collision.gameObject.CompareTag("Submission"))
-        {
-            collision.gameObject.GetComponentInParent<SubmissionTable>().insertSlug(slugType);
             Destroy(slug);
         }
     }

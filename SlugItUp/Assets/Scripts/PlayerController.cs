@@ -42,6 +42,11 @@ public class PlayerController : MonoBehaviour
                 targetBreeding.GetComponentInParent<BreedingController>().setNewSlug();
             }
         }
+        if (Time.time > timeLimit)
+        {
+            SceneController sceneController = new SceneController();
+            sceneController.sceneEvent(2);
+        }
     }
 
     private void FixedUpdate()
