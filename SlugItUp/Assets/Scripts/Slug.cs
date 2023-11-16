@@ -5,9 +5,9 @@ using UnityEngine;
 public class Slug
 {
     // Constants
-    public static readonly int RED = 1;
-    public static readonly int GREEN = 2;
-    public static readonly int BLUE = 4;
+    public static readonly int RED = 0b001;
+    public static readonly int GREEN = 0b010;
+    public static readonly int BLUE = 0b100;
 
     // Instance variables
     private int type;
@@ -69,7 +69,7 @@ public class Slug
                 name = "blue";
                 break;
             case 5:
-                name = "purple";
+                name = "magenta";
                 break;
             case 6:
                 name = "cyan";
@@ -80,6 +80,41 @@ public class Slug
         }
 
         return name;
+    }
+
+    public static Color getColorFromType(int type) 
+    {
+        Color color = Color.white;
+
+        switch (type)
+        {
+            case 0:
+                color = Color.white;
+                break;
+            case 1:
+                color = Color.red;
+                break;
+            case 2:
+                color = Color.green;
+                break;
+            case 3:
+                color = Color.yellow;
+                break;
+            case 4:
+                color = Color.blue;
+                break;
+            case 5:
+                color = Color.magenta;
+                break;
+            case 6:
+                color = Color.cyan;
+                break;
+            case 7:
+                color = Color.black;
+                break;
+        }
+
+        return color;
     }
 
     // Return the string value of the name of the provided slug

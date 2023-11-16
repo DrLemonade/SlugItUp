@@ -8,19 +8,34 @@ public class SlugController : MonoBehaviour
     public float frictionConstant;
     public Rigidbody2D rb;
     public PlayerController player;
-    public GameObject slug;
 
     private bool collectable;
-    private Slug slugType;
+    private Slug slug;
 
     // Start is called before the first frame update
     void Start()
     {
         collectable = false;
-        slugType = new Slug((int) Math.Pow(2, UnityEngine.Random.Range(0, 3)), UnityEngine.Random.Range(1, 4), (UnityEngine.Random.Range(0, 2) == 0));
-        int t = slugType.getType();
-        Color c = (t == 0 ? Color.white : (t == 1 ? Color.red : (t == 2 ? Color.green : Color.blue)));
-        GetComponent<SpriteRenderer>().color = c;
+
+        if (slug == null)
+            slug = new Slug((int) Math.Pow(2, UnityEngine.Random.Range(0, 3)), UnityEngine.Random.Range(1, 4), (UnityEngine.Random.Range(0, 2) == 0));
+
+        Color slugColor = Slug.getColorFromType(slug.getType());
+
+        if (slug.getIsDry())
+            slugColor.a = 255;
+        else
+            slugColor.a = 100;
+
+            GetComponent<SpriteRenderer>().color = slugColor;
+
+        gameObject.transform.localScale = new Vector3(1, 1, 1);
+        if (slug.getSize() == 1)
+            gameObject.transform.localScale *= 0.4f;
+        else if (slug.getSize() == 2)
+            gameObject.transform.localScale *= 0.7f;
+        else if (slug.getSize() == 3)
+            gameObject.transform.localScale *= 1.1f;
     }
 
     // Update is called once per frame
@@ -30,8 +45,8 @@ public class SlugController : MonoBehaviour
         {
             if (Input.GetKeyDown("e") && collectable)
             {
-                player.HoldSlug(slugType);
-                Destroy(slug);
+                player.HoldSlug(slug);
+                Destroy(gameObject);
             }
         }
     }
@@ -74,29 +89,29 @@ public class SlugController : MonoBehaviour
         if (collision.gameObject.CompareTag("Collector") && player.getTargetSlug() == null)
         {
             collectable = true;
-            player.setTargetSlug(slug);
+            player.setTargetSlug(gameObject);
         }
         
         if (collision.gameObject.CompareTag("Breeding"))
         {
-            collision.gameObject.GetComponentInParent<BreedingController>().insertSlug(slugType);
-            Destroy(slug);
+            collision.gameObject.GetComponentInParent<BreedingController>().insertSlug(slug);
+            Destroy(gameObject);
         }
         if (collision.gameObject.CompareTag("Trash"))
         {
-            Destroy(slug);
+            Destroy(gameObject);
         }
 
         if (collision.gameObject.CompareTag("Submission"))
         {
-            collision.gameObject.GetComponentInParent<SubmissionTable>().insertSlug(slugType);
-            Destroy(slug);
+            collision.gameObject.GetComponentInParent<SubmissionTable>().insertSlug(slug);
+            Destroy(gameObject);
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Collector") && player.getTargetSlug() == slug)
+        if (collision.gameObject.CompareTag("Collector") && player.getTargetSlug() == gameObject)
         {
             collectable = false;
             player.setTargetSlug(null);
@@ -104,7 +119,7 @@ public class SlugController : MonoBehaviour
     }
 
     public void setSlugType(Slug s)
-    {
-        slugType = s;
+    {   
+        slug = s;
     }
 }
