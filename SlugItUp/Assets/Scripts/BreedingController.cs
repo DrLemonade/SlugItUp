@@ -33,6 +33,7 @@ public class BreedingController : MonoBehaviour
                 newSlug = new Slug(Slug.getMixedType(heldSlug1.getType(), heldSlug2.getType()), 1, false);
                 heldSlug1 = null;
                 heldSlug2 = null;
+                gameObject.GetComponent<SpriteRenderer>().color = Color.white;
             }
         }
     }
