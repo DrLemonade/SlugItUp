@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
             {
                 heldSlug = targetBreeding.GetComponentInParent<BreedingController>().getNewSlug();
                 targetBreeding.GetComponentInParent<BreedingController>().setNewSlug();
+                targetBreeding.GetComponent<SpriteRenderer>().color = Color.black;
             }
         }
         if (Time.time > timeLimit)

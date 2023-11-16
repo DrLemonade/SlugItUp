@@ -18,7 +18,7 @@ public class SlugController : MonoBehaviour
         collectable = false;
 
         if (slug == null)
-            slug = new Slug((int) Math.Pow(2, UnityEngine.Random.Range(0, 3)), UnityEngine.Random.Range(1, 4), (UnityEngine.Random.Range(0, 2) == 0));
+            slug = new Slug((int) Math.Pow(2, UnityEngine.Random.Range(0, 3)), 1, false);
 
         Color slugColor = Slug.getColorFromType(slug.getType());
 
