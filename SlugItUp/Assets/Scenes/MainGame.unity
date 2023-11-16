@@ -338,7 +338,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  timeLimit: 0
+  timeLimit: 1000
   initVelocityMN: 35
   rb: {fileID: 326477477}
   slugPreset: {fileID: 3613697417638751517, guid: c1c81283a7855f245aeff302361ec4de, type: 3}
@@ -515,7 +515,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1263526177}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.0427914, y: -0.22550319, z: -9.960562}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
