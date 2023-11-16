@@ -88,4 +88,9 @@ public class Slug
         return getTypeName(slug.getType()) + " slug";
     }
 
+    public string toString()
+    {
+        return "(" + type + ", " + size + ", " + (isDry ? 0 : 1) + ")";
+    }
+
 }
