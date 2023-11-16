@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float speed = 4f;
+    public float timeLimit;
     public float initVelocityMN;
     public Rigidbody2D rb;
     public Slug heldSlug;

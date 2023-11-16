@@ -78,6 +78,10 @@ public class SlugController : MonoBehaviour
             collision.gameObject.GetComponentInParent<BreedingController>().insertSlug(slugType);
             Destroy(slug);
         }
+        if (collision.gameObject.CompareTag("Trash"))
+        {
+            Destroy(slug);
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
