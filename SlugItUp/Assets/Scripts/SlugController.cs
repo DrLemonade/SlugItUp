@@ -16,7 +16,7 @@ public class SlugController : MonoBehaviour
     void Start()
     {
         collectable = false;
-        slugType = new Slug("red", "red", 1, true);
+        slugType = new Slug(Slug.RED, 1, true);
     }
 
     // Update is called once per frame
@@ -93,24 +93,4 @@ public class SlugController : MonoBehaviour
     {
         slugType = s;
     }
-}
-
-public class Slug
-{
-    private string color1;
-    private string color2;
-    private int size;
-    private bool wet;
-
-    public Slug(string c1, string c2, int s, bool w)
-    {
-        color1 = c1;
-        color2 = c2;
-        size = s;
-        wet = w;
-    }
-
-    public string getColor1() { return color1; }
-
-    public string getColor2() { return color2; }
 }

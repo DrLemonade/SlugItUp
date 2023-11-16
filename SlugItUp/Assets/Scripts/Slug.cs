@@ -1,0 +1,91 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Slug
+{
+    // Constants
+    public static readonly int RED = 1;
+    public static readonly int GREEN = 2;
+    public static readonly int BLUE = 4;
+
+    // Instance variables
+    private int type;
+    private int size;
+    private bool isDry;
+
+    // Creates a new slug
+    public Slug(int type, int size, bool isDry)
+    {
+        this.type = type;
+        this.size = size;
+        this.isDry = isDry;
+    }
+
+    // Returns this instances type variable value
+    public int getType() 
+    {
+        return type;
+    }
+
+    // Returns this instances size variable value
+    public int getSize() 
+    {
+        return size;
+    }
+
+    // Returns this instances isDry variable value
+    public bool getIsDry() 
+    {
+        return isDry;
+    }
+
+    // Returns the color mixing result of two colors
+    public static int getMixedType(int type1, int type2) 
+    {
+        return (type1 | type2);
+    }
+
+    // Returns the string value of the name of a color type
+    public static string getTypeName(int type) 
+    {
+        string name = "none";
+
+        switch (type)
+        {
+            case 0:
+                name = "white";
+                break;
+            case 1:
+                name = "red";
+                break;
+            case 2:
+                name = "green";
+                break;
+            case 3:
+                name = "yellow";
+                break;
+            case 4:
+                name = "blue";
+                break;
+            case 5:
+                name = "purple";
+                break;
+            case 6:
+                name = "cyan";
+                break;
+            case 7:
+                name = "black";
+                break;
+        }
+
+        return name;
+    }
+
+    // Return the string value of the name of the provided slug
+    public static string getSlugName(Slug slug)
+    {
+        return getTypeName(slug.getType()) + " slug";
+    }
+
+}
