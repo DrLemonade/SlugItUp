@@ -24,6 +24,7 @@ public class SpawnController : MonoBehaviour
             GameObject slug = Instantiate(slugPreset);
             slug.transform.position = new Vector2(Random.Range(-11, 11), Random.Range(-5, 5));
             slug.GetComponent<SlugController>().player = player;
+            lastTime = Time.time;
         }
     }
 }

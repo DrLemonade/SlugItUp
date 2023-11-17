@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D rb;
     public Slug heldSlug;
     public GameObject slugPreset;
+    public Animator animator;
 
     private GameObject targetSlug = null; // The slug that the player targets to pick up
     private GameObject targetBreeding = null; // The breeding pool that the player targets to pick a slug from
@@ -40,7 +41,7 @@ public class PlayerController : MonoBehaviour
             {
                 heldSlug = targetBreeding.GetComponentInParent<BreedingController>().getNewSlug();
                 targetBreeding.GetComponentInParent<BreedingController>().setNewSlug();
-                targetBreeding.GetComponent<SpriteRenderer>().color = Color.black;
+                targetBreeding.GetComponentInParent<SpriteRenderer>().color = Color.black;
             }
         }
         if (Time.time > timeLimit)
@@ -55,6 +56,10 @@ public class PlayerController : MonoBehaviour
         float moveHorizontal = Input.GetAxis("Horizontal")*speed;
         float moveVertical = Input.GetAxis("Vertical")*speed;
         rb.velocity = new Vector2(moveHorizontal, moveVertical);
+        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);
+
+        animator.SetFloat("XVelocity", moveHorizontal);
+        animator.SetFloat("YVelocity", moveVertical);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

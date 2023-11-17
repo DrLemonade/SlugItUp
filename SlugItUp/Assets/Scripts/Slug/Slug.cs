@@ -23,6 +23,7 @@ public class Slug
         this.type = type;
         this.size = size;
         this.isDry = isDry;
+        scoreAddition = 1;
     }
 
     // Returns this instances type variable value
