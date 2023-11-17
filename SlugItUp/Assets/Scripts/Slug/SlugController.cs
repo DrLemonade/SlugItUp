@@ -107,6 +107,18 @@ public class SlugController : MonoBehaviour
             collision.gameObject.GetComponentInParent<SubmissionTable>().insertSlug(slug);
             Destroy(gameObject);
         }
+
+        if (collision.gameObject.CompareTag("Feeder"))
+        {
+            collision.gameObject.GetComponentInParent<FeederController>().insertSlug(slug);
+            Destroy(gameObject);
+        }
+
+        if (collision.gameObject.CompareTag("Dryer"))
+        {
+            collision.gameObject.GetComponentInParent<DryerController>().insertSlug(slug);
+            Destroy(gameObject);
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)

@@ -21,6 +21,8 @@ public class PlayerController : MonoBehaviour
     private int direction; // 0 = forward, 1 = right, 2 = backward, 3 = left
     private GameObject targetSlug = null; // The slug that the player targets to pick up
     private GameObject targetBreeding = null; // The breeding pool that the player targets to pick a slug from
+    private GameObject targetDryer = null;
+    private GameObject targetFeeder = null;
 
     // Start is called before the first frame update
     void Start()
@@ -51,6 +53,20 @@ public class PlayerController : MonoBehaviour
                 heldSlug = targetBreeding.GetComponentInParent<BreedingController>().getNewSlug();
                 targetBreeding.GetComponentInParent<BreedingController>().setNewSlug();
                 targetBreeding.GetComponentInParent<SpriteRenderer>().color = Color.black;
+            }
+
+            if (Input.GetKeyDown("e") && targetFeeder != null && targetFeeder.GetComponentInParent<FeederController>() != null) // Pick up slug from feeder pool
+            {
+                heldSlug = targetFeeder.GetComponentInParent<FeederController>().getSlug();
+                targetBreeding.GetComponentInParent<FeederController>().empty();
+                targetBreeding.GetComponentInParent<SpriteRenderer>().color = Color.red;
+            }
+
+            if (Input.GetKeyDown("e") && targetDryer != null && targetDryer.GetComponentInParent<DryerController>() != null) // Pick up slug from dryer pool
+            {
+                heldSlug = targetBreeding.GetComponentInParent<DryerController>().getSlug();
+                targetBreeding.GetComponentInParent<DryerController>().empty();
+                targetBreeding.GetComponentInParent<SpriteRenderer>().color = Color.yellow;
             }
         }
         if (Time.time > timeLimit)
@@ -92,11 +108,21 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat("YVelocity", moveVertical);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision) // NOTE: This could be shortened with inheritance
     {
         if (collision.gameObject.CompareTag("Breeding"))
         {
             targetBreeding = collision.gameObject;
+        }
+
+        if (collision.gameObject.CompareTag("Feeder"))
+        {
+            targetFeeder = collision.gameObject;
+        }
+
+        if (collision.gameObject.CompareTag("Dryer"))
+        {
+            targetDryer = collision.gameObject;
         }
     }
 
@@ -105,6 +131,16 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject == targetBreeding)
         {
             targetBreeding = null;
+        }
+
+        if (collision.gameObject.CompareTag("Feeder"))
+        {
+            targetFeeder = null;
+        }
+
+        if (collision.gameObject.CompareTag("Dryer"))
+        {
+            targetDryer = null;
         }
     }
 
