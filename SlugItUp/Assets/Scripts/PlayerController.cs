@@ -10,8 +10,15 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D rb;
     public Slug heldSlug;
     public GameObject slugPreset;
+    public GameObject slugSpriteObj;
     public Animator animator;
 
+    public Sprite slugSpriteL;
+    public Sprite slugSpriteR;
+    public Sprite slugSpriteB;
+    public Sprite slugSpriteF;
+
+    private int direction; // 0 = forward, 1 = right, 2 = backward, 3 = left
     private GameObject targetSlug = null; // The slug that the player targets to pick up
     private GameObject targetBreeding = null; // The breeding pool that the player targets to pick a slug from
 
@@ -19,6 +26,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         heldSlug = null;
+        direction = 0;
     }
 
     // Update is called once per frame
@@ -34,6 +42,7 @@ public class PlayerController : MonoBehaviour
             Rigidbody2D slugRB = newSlug.GetComponent<Rigidbody2D>();
             slugRB.velocity = new Vector2((Input.mousePosition.x - 585) / 50 - newSlug.transform.position.x, (Input.mousePosition.y - 250) / 45 - newSlug.transform.position.y);
             heldSlug = null;
+            slugSpriteObj.SetActive(false);
         }
         if(heldSlug == null)
         {
@@ -58,6 +67,27 @@ public class PlayerController : MonoBehaviour
         rb.velocity = new Vector2(moveHorizontal, moveVertical);
         transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);
 
+        if (moveHorizontal > 0)
+        {
+            direction = 1;
+            slugSpriteObj.GetComponent<SpriteRenderer>().sprite = slugSpriteR;
+        }
+        else if (moveHorizontal < 0)
+        {
+            direction = 3;
+            slugSpriteObj.GetComponent<SpriteRenderer>().sprite = slugSpriteL;
+        }
+        else if (moveVertical > 0)
+        {
+            direction = 2;
+            slugSpriteObj.GetComponent<SpriteRenderer>().sprite = slugSpriteB;
+        }
+        else if (moveVertical < 0)
+        {
+            direction = 0;
+            slugSpriteObj.GetComponent<SpriteRenderer>().sprite = slugSpriteF;
+        }
+
         animator.SetFloat("XVelocity", moveHorizontal);
         animator.SetFloat("YVelocity", moveVertical);
     }
@@ -81,6 +111,23 @@ public class PlayerController : MonoBehaviour
     public void HoldSlug(Slug slug)
     {
         heldSlug = slug;
+        slugSpriteObj.SetActive(true);
+        slugSpriteObj.GetComponent<SpriteRenderer>().color = Slug.getColorFromType(slug.getType());
+        switch (direction)
+        {
+            case 0:
+                slugSpriteObj.GetComponent<SpriteRenderer>().sprite = slugSpriteF;
+                break;
+            case 1:
+                slugSpriteObj.GetComponent<SpriteRenderer>().sprite = slugSpriteR;
+                break;
+            case 2:
+                slugSpriteObj.GetComponent<SpriteRenderer>().sprite = slugSpriteB;
+                break;
+            case 3:
+                slugSpriteObj.GetComponent<SpriteRenderer>().sprite = slugSpriteL;
+                break;
+        }
     }
 
     public void setTargetSlug(GameObject slug) { targetSlug = slug; }
