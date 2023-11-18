@@ -20,9 +20,7 @@ public class PlayerController : MonoBehaviour
 
     private int direction; // 0 = forward, 1 = right, 2 = backward, 3 = left
     private GameObject targetSlug = null; // The slug that the player targets to pick up
-    private GameObject targetBreeding = null; // The breeding pool that the player targets to pick a slug from
-    private GameObject targetDryer = null;
-    private GameObject targetFeeder = null;
+    private GameObject targetAppliance = null;
 
     // Start is called before the first frame update
     void Start()
@@ -45,40 +43,21 @@ public class PlayerController : MonoBehaviour
             slugRB.velocity = new Vector2((Input.mousePosition.x - 585) / 50 - newSlug.transform.position.x, (Input.mousePosition.y - 250) / 45 - newSlug.transform.position.y);
             heldSlug = null;
             slugSpriteObj.SetActive(false);
-        }
-        if(heldSlug == null)
+        } 
+        else if(heldSlug == null)
         {
-            if (Input.GetKeyDown("e") && targetBreeding != null && targetBreeding.GetComponentInParent<BreedingController>().getNewSlug() != null) // Pick up slug from breeding pool
+            if (Input.GetKeyDown("e")) 
             {
-                heldSlug = targetBreeding.GetComponentInParent<BreedingController>().getNewSlug();
-                targetBreeding.GetComponentInParent<BreedingController>().setNewSlug();
-                targetBreeding.GetComponentInParent<SpriteRenderer>().color = Color.black;
-            }
-            else if (Input.GetKeyDown("e") && targetBreeding != null && targetBreeding.GetComponentInParent<BreedingController>().heldSlug2 != null) // Pick up slug from breeding pool
-            {
-                heldSlug = targetBreeding.GetComponentInParent<BreedingController>().heldSlug2;
-                targetBreeding.GetComponentInParent<BreedingController>().heldSlug2 = null;
-            }
-            else if (Input.GetKeyDown("e") && targetBreeding != null && targetBreeding.GetComponentInParent<BreedingController>().heldSlug1 != null) // Pick up slug from breeding pool
-            {
-                heldSlug = targetBreeding.GetComponentInParent<BreedingController>().heldSlug1;
-                targetBreeding.GetComponentInParent<BreedingController>().heldSlug1 = null;
-            }
-
-            if (Input.GetKeyDown("e") && targetFeeder != null && targetFeeder.GetComponentInParent<FeederController>().getSlug() != null) // Pick up slug from feeder pool
-            {
-                heldSlug = targetFeeder.GetComponentInParent<FeederController>().getSlug();
-                targetBreeding.GetComponentInParent<FeederController>().empty();
-                targetBreeding.GetComponentInParent<SpriteRenderer>().color = Color.red;
-            }
-
-            if (Input.GetKeyDown("e") && targetDryer != null && targetDryer.GetComponentInParent<DryerController>().getSlug() != null) // Pick up slug from dryer pool
-            {
-                heldSlug = targetBreeding.GetComponentInParent<DryerController>().getSlug();
-                targetBreeding.GetComponentInParent<DryerController>().empty();
-                targetBreeding.GetComponentInParent<SpriteRenderer>().color = Color.yellow;
+                if (targetAppliance != null) // Pick up slug from appliance
+                {
+                    Slug s = targetAppliance.GetComponentInParent<ApplianceController>().getSlug();
+                    if (s != null) {
+                        HoldSlug(s);
+                    }
+                }
             }
         }
+
         if (Time.time > timeLimit)
         {
             SceneController sceneController = new SceneController();
@@ -120,45 +99,42 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision) // NOTE: This could be shortened with inheritance
     {
-        if (collision.gameObject.CompareTag("Breeding"))
-        {
-            targetBreeding = collision.gameObject;
-        }
+        bool isBreeder = collision.gameObject.CompareTag("Breeding");
+        bool isFeeder = collision.gameObject.CompareTag("Feeder");
+        bool isDryer = collision.gameObject.CompareTag("Dryer");
 
-        if (collision.gameObject.CompareTag("Feeder"))
+        if (isBreeder || isFeeder || isDryer)
         {
-            targetFeeder = collision.gameObject;
-        }
-
-        if (collision.gameObject.CompareTag("Dryer"))
-        {
-            targetDryer = collision.gameObject;
+            targetAppliance = collision.gameObject;
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject == targetBreeding)
+        if (collision.gameObject == targetAppliance)
         {
-            targetBreeding = null;
-        }
-
-        if (collision.gameObject.CompareTag("Feeder"))
-        {
-            targetFeeder = null;
-        }
-
-        if (collision.gameObject.CompareTag("Dryer"))
-        {
-            targetDryer = null;
+            targetAppliance = null;
         }
     }
 
     public void HoldSlug(Slug slug)
     {
-        heldSlug = slug;
         slugSpriteObj.SetActive(true);
-        slugSpriteObj.GetComponent<SpriteRenderer>().color = Slug.getColorFromType(slug.getType());
+        
+        Color slugColor = Slug.getColorFromType(slug.getType());
+
+        if (slug.getIsDry())
+            slugColor.a = 1f;
+        else
+            slugColor.a = 200f / 255f;
+
+        slugSpriteObj.GetComponent<SpriteRenderer>().color = slugColor;
+
+        slugSpriteObj.transform.localScale = new Vector3(1, 1, 1);
+        slugSpriteObj.transform.localScale *= 0.325f + (slug.getSize() * 0.2f);
+
+        heldSlug = slug;
+
         switch (direction)
         {
             case 0:

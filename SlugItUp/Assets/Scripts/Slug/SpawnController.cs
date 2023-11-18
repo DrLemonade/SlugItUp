@@ -22,7 +22,7 @@ public class SpawnController : MonoBehaviour
         if(Time.time - lastTime > period)
         {
             GameObject slug = Instantiate(slugPreset);
-            slug.transform.position = new Vector2(Random.Range(-11, 11), Random.Range(-5, 5));
+            slug.transform.position = new Vector2(Random.Range(-8, 9), Random.Range(-4, 5));
             slug.GetComponent<SlugController>().player = player;
             lastTime = Time.time;
         }

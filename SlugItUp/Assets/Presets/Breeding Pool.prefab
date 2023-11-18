@@ -163,8 +163,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fac192e7cc472f442a9d1368563e600f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timer: 10
-  initXVelocity: 4
-  initYVelocity: 4
-  slug: {fileID: 3613697417638751517, guid: c1c81283a7855f245aeff302361ec4de, type: 3}
-  player: {fileID: 0}
+  applianceTimer: 1

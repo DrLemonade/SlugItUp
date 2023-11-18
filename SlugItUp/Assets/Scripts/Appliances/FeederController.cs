@@ -2,32 +2,65 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FeederController : MonoBehaviour
+public class FeederController : ApplianceController
 {
 
-    public float timer;
+    private Slug heldSlug;
 
-    private float startTime;
-    private Slug slug;
-
-    public void insertSlug(Slug slug) // Inserts slug when collides with Breeder
+    void Start()
     {
-        slug = new Slug(slug.getType(), (slug.getSize() < 3 ? slug.getSize() + 1 : 3), slug.getIsDry());
-        startTime = Time.time;
+        gameObject.GetComponent<SpriteRenderer>().color = Color.red;
     }
 
-    public Slug getSlug() {
-        if (slug != null && (Time.time - startTime >= timer)) {
-            return slug;
-        } else {
-            return null;
+    void Update() 
+    {
+        if (producedSlug == null && heldSlug != null && isTimeFinished()) 
+        {
+            // Score addition? What triggers a score addition? I need more info!
+            producedSlug = new Slug(heldSlug.getType(), (heldSlug.getSize() < 3 ? heldSlug.getSize() + 1 : 3), heldSlug.getIsDry());
+            heldSlug = null;
+
+            gameObject.GetComponent<SpriteRenderer>().color = Color.white;
         }
     }
 
-    public void empty() {
-        if (slug != null && (Time.time - startTime >= timer)) {
-            slug = null;
+    public override bool insertSlug(Slug slug) // Inserts slug when collides with Feeder
+    {
+        if (heldSlug == null && producedSlug == null) 
+        {
+            heldSlug = slug;
+            startTime = Time.time;
+            return true;
         }
+
+        return false;
+    }
+
+    public override Slug getSlug() 
+    {
+        if (producedSlug != null && isTimeFinished()) 
+        {
+            gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+
+            startTime = 0;
+
+            Slug temp = producedSlug;
+            producedSlug = null;
+            return temp;
+        } 
+        else 
+        {
+            if (heldSlug != null)
+            {
+                startTime = 0;
+
+                Slug temp = heldSlug;
+                heldSlug = null;
+                return temp;
+            }
+        }
+
+        return null;
     }
     
 }

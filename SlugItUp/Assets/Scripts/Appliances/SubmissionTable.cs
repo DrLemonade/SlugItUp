@@ -2,44 +2,51 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SubmissionTable : MonoBehaviour
+public class SubmissionTable : ApplianceController
 {
-    public static int submissionCounter;
-    public static Slug[] submission;
+
+    public static Slug requiredSlug;
 
     private int score;
 
-    void Start() {
-        submissionCounter = 0;
-        submission = ListGenerator.generateSlugList(10);
+    void Start() 
+    {
+        requiredSlug = ListGenerator.getRandomSlug();
 
         score = 0;
 
-        foreach (Slug s in submission) {
-            Debug.Log("One of the wanted slugs: " + s.toString());
-        }
+        Debug.Log("Wanted slug: " + Slug.getSlugFullName(requiredSlug));
     }
 
-    public void insertSlug(Slug slug) {
-        Slug requiredSlug = submission[submissionCounter];
-
+    public override bool insertSlug(Slug slug) 
+    {
         bool hasSameType = (requiredSlug.getType() == slug.getType());
         bool hasSameSize = (requiredSlug.getSize() == slug.getSize());
         bool hasSameWetness = (requiredSlug.getIsDry() == slug.getIsDry());
 
-        if (hasSameType && hasSameSize && hasSameWetness) {
-            submissionCounter++;
+        if (hasSameType && hasSameSize && hasSameWetness) 
+        {
+            requiredSlug = ListGenerator.getRandomSlug();
 
             score += slug.getScoreAddition();
 
             Debug.Log("This was correct!");
-            Debug.Log("You gave me: " + slug.toString() + "!");
-        } else {
+            Debug.Log("You gave me: " + Slug.getSlugFullName(slug) + "!");
+            Debug.Log("Now I want: " + Slug.getSlugFullName(requiredSlug) + "!");
+        } 
+        else 
+        {
             Debug.Log("This was wrong!");
-            Debug.Log("You gave me: " + slug.toString());
-            Debug.Log("But I wanted: " + requiredSlug.toString());
-            // The person who submitted this slug is stupid and should die
+            Debug.Log("You gave me: " + Slug.getSlugFullName(slug));
+            Debug.Log("But I wanted: " + Slug.getSlugFullName(requiredSlug));
         }
+
+        return true;
+    }
+
+    public override Slug getSlug() 
+    {
+        return null;
     }
 
 }

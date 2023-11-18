@@ -8,14 +8,12 @@ public class Slug
     public static readonly int RED = 0b001;
     public static readonly int GREEN = 0b010;
     public static readonly int BLUE = 0b100;
-   
-    // How much this slug adds to score
-    private int scoreAddition;
 
     // Instance variables
     private int type;
     private int size;
     private bool isDry;
+    private int scoreAddition;
 
     // Creates a new slug
     public Slug(int type, int size, bool isDry)
@@ -125,6 +123,11 @@ public class Slug
     public static string getSlugName(Slug slug)
     {
         return getTypeName(slug.getType()) + " slug";
+    }
+
+    public static string getSlugFullName(Slug slug)
+    {
+        return getTypeName(slug.getType()) + " " + slug.getSize() + " length " + (slug.getIsDry() ? "dry" : "wet") + " slug";
     }
 
     public string toString()

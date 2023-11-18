@@ -2,53 +2,94 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BreedingController : MonoBehaviour
+public class BreedingController : ApplianceController
 {
-    public float timer;
+
+    // Instance variables
     public Slug heldSlug1;
     public Slug heldSlug2;
-
-    private float lastTime;
-    private Slug newSlug;
 
     // Start is called before the first frame update
     void Start()
     {
         heldSlug1 = null;
         heldSlug2 = null;
-        newSlug = null;
+        producedSlug = null;
+
+        gameObject.GetComponent<SpriteRenderer>().color = Color.black;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(heldSlug2 != null) // Takes (timer) seconds to finish breeding
+        if (producedSlug == null && isTimeFinished())
         {
-            if (Time.time - lastTime >= timer)
-            {
-                newSlug = new Slug(Slug.getMixedType(heldSlug1.getType(), heldSlug2.getType()), 1, false);
-                newSlug.addScoreAddition();
-                heldSlug1 = null;
-                heldSlug2 = null;
-                gameObject.GetComponent<SpriteRenderer>().color = Color.white;
-            }
+            producedSlug = new Slug(Slug.getMixedType(heldSlug1.getType(), heldSlug2.getType()), 1, false);
+            producedSlug.addScoreAddition();
+            heldSlug1 = null;
+            heldSlug2 = null;
+            gameObject.GetComponent<SpriteRenderer>().color = Color.white;
         }
     }
     
-    public void insertSlug(Slug slug) // Inserts slug when collides with Breeder
+    public override bool insertSlug(Slug slug) // Inserts slug when collides with Breeder
     {
-        if (heldSlug1 == null)
-            heldSlug1 = slug;
-        else if (heldSlug2 == null)
+        if (producedSlug == null)
         {
-            heldSlug2 = slug;
-            lastTime = Time.time;
+            if (heldSlug1 == null) 
+            {
+                heldSlug1 = slug;
+                return true;
+            }
+            else if (heldSlug2 == null)
+            {
+                heldSlug2 = slug;
+                startTime = Time.time;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public override Slug getSlug() // For the record, this way of styling the if-statements makes me wanna puke.
+    {
+        if (producedSlug != null) 
+        {
+            gameObject.GetComponent<SpriteRenderer>().color = Color.black;
+
+            startTime = 0;
+
+            Slug temp = producedSlug;
+            producedSlug = null;
+            return temp;
+        }
+        else
+        {
+            if (heldSlug2 != null) 
+            {
+                startTime = 0;
+
+                Slug temp = heldSlug2;
+                heldSlug2 = null;
+                return temp;
+            }
+            else
+            {
+                if (heldSlug1 != null)
+                {
+                    startTime = 0;
+
+                    Slug temp = heldSlug1;
+                    heldSlug1 = null;
+                    return temp;
+                }
+                else
+                {
+                    return null;
+                }
+            }
         }
     }
 
-    public Slug getNewSlug() { return newSlug; } // Returns new slug
-
-    public void setNewSlug() { newSlug = null; } // Gets Breeding ready for next two slugs
-
-    public bool isFull() { return heldSlug2 != null; } // Returns true if there are two slugs already in the breeder
 }

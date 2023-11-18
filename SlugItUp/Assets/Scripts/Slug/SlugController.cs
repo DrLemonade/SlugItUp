@@ -30,19 +30,32 @@ public class SlugController : MonoBehaviour
         Color slugColor = Slug.getColorFromType(slug.getType());
 
         if (slug.getIsDry())
-            slugColor.a = 255;
+            slugColor.a = 1f;
         else
-            slugColor.a = 100;
+            slugColor.a = 200f / 255f;
 
-            GetComponent<SpriteRenderer>().color = slugColor;
+        SpriteRenderer sprite = GetComponent<SpriteRenderer>();
+
+        sprite.color = slugColor;
 
         gameObject.transform.localScale = new Vector3(1, 1, 1);
-        if (slug.getSize() == 1)
-            gameObject.transform.localScale *= 0.15f;
-        else if (slug.getSize() == 2)
-            gameObject.transform.localScale *= 0.2f;
-        else if (slug.getSize() == 3)
-            gameObject.transform.localScale *= 1.25f;
+        gameObject.transform.localScale *= 0.05f + (slug.getSize() * 0.05f);
+
+        switch (UnityEngine.Random.Range(0, 4))
+        {
+            case 0:
+                sprite.sprite = slugSpriteF;
+                break;
+            case 1:
+                sprite.sprite = slugSpriteR;
+                break;
+            case 2:
+                sprite.sprite = slugSpriteB;
+                break;
+            case 3:
+                sprite.sprite = slugSpriteL;
+                break;
+        }
     }
 
     // Update is called once per frame
@@ -60,6 +73,7 @@ public class SlugController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        //Rigidbody2D rb = GetComponent<Rigidbody2D>();
         // Friction
         if (rb.velocity.x > 0) // Friction x pos and right velocity
         {
@@ -102,36 +116,18 @@ public class SlugController : MonoBehaviour
             collectable = true;
             player.setTargetSlug(gameObject);
         }
+
+        bool isBreeder = collision.gameObject.CompareTag("Breeding");
+        bool isTrash = collision.gameObject.CompareTag("Trash");
+        bool isBarrel = collision.gameObject.CompareTag("Submission");
+        bool isFeeder = collision.gameObject.CompareTag("Feeder");
+        bool isDryer = collision.gameObject.CompareTag("Dryer");
         
-        if (collision.gameObject.CompareTag("Breeding"))
+        if (isBreeder || isTrash || isBarrel || isFeeder || isDryer)
         {
-            if (collision.gameObject.GetComponentInParent<BreedingController>().heldSlug2 == null)
-            {
-                collision.gameObject.GetComponentInParent<BreedingController>().insertSlug(slug);
+            bool success = collision.gameObject.GetComponentInParent<ApplianceController>().insertSlug(slug);
+            if (success)
                 Destroy(gameObject);
-            }
-        }
-        if (collision.gameObject.CompareTag("Trash"))
-        {
-            Destroy(gameObject);
-        }
-
-        if (collision.gameObject.CompareTag("Submission"))
-        {
-            collision.gameObject.GetComponentInParent<SubmissionTable>().insertSlug(slug);
-            Destroy(gameObject);
-        }
-
-        if (collision.gameObject.CompareTag("Feeder"))
-        {
-            collision.gameObject.GetComponentInParent<FeederController>().insertSlug(slug);
-            Destroy(gameObject);
-        }
-
-        if (collision.gameObject.CompareTag("Dryer"))
-        {
-            collision.gameObject.GetComponentInParent<DryerController>().insertSlug(slug);
-            Destroy(gameObject);
         }
     }
 
