@@ -5,14 +5,10 @@ using UnityEngine;
 public class BreedingController : MonoBehaviour
 {
     public float timer;
-    public float initXVelocity;
-    public float initYVelocity;
-    public GameObject slug;
-    public GameObject player;
+    public Slug heldSlug1;
+    public Slug heldSlug2;
 
     private float lastTime;
-    private Slug heldSlug1;
-    private Slug heldSlug2;
     private Slug newSlug;
 
     // Start is called before the first frame update
@@ -53,4 +49,6 @@ public class BreedingController : MonoBehaviour
     public Slug getNewSlug() { return newSlug; } // Returns new slug
 
     public void setNewSlug() { newSlug = null; } // Gets Breeding ready for next two slugs
+
+    public bool isFull() { return heldSlug2 != null; } // Returns true if there are two slugs already in the breeder
 }

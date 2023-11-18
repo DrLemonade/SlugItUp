@@ -48,21 +48,31 @@ public class PlayerController : MonoBehaviour
         }
         if(heldSlug == null)
         {
-            if (Input.GetKeyDown("e") && targetBreeding != null && targetBreeding.GetComponentInParent<BreedingController>() != null) // Pick up slug from breeding pool
+            if (Input.GetKeyDown("e") && targetBreeding != null && targetBreeding.GetComponentInParent<BreedingController>().getNewSlug() != null) // Pick up slug from breeding pool
             {
                 heldSlug = targetBreeding.GetComponentInParent<BreedingController>().getNewSlug();
                 targetBreeding.GetComponentInParent<BreedingController>().setNewSlug();
                 targetBreeding.GetComponentInParent<SpriteRenderer>().color = Color.black;
             }
+            else if (Input.GetKeyDown("e") && targetBreeding != null && targetBreeding.GetComponentInParent<BreedingController>().heldSlug2 != null) // Pick up slug from breeding pool
+            {
+                heldSlug = targetBreeding.GetComponentInParent<BreedingController>().heldSlug2;
+                targetBreeding.GetComponentInParent<BreedingController>().heldSlug2 = null;
+            }
+            else if (Input.GetKeyDown("e") && targetBreeding != null && targetBreeding.GetComponentInParent<BreedingController>().heldSlug1 != null) // Pick up slug from breeding pool
+            {
+                heldSlug = targetBreeding.GetComponentInParent<BreedingController>().heldSlug1;
+                targetBreeding.GetComponentInParent<BreedingController>().heldSlug1 = null;
+            }
 
-            if (Input.GetKeyDown("e") && targetFeeder != null && targetFeeder.GetComponentInParent<FeederController>() != null) // Pick up slug from feeder pool
+            if (Input.GetKeyDown("e") && targetFeeder != null && targetFeeder.GetComponentInParent<FeederController>().getSlug() != null) // Pick up slug from feeder pool
             {
                 heldSlug = targetFeeder.GetComponentInParent<FeederController>().getSlug();
                 targetBreeding.GetComponentInParent<FeederController>().empty();
                 targetBreeding.GetComponentInParent<SpriteRenderer>().color = Color.red;
             }
 
-            if (Input.GetKeyDown("e") && targetDryer != null && targetDryer.GetComponentInParent<DryerController>() != null) // Pick up slug from dryer pool
+            if (Input.GetKeyDown("e") && targetDryer != null && targetDryer.GetComponentInParent<DryerController>().getSlug() != null) // Pick up slug from dryer pool
             {
                 heldSlug = targetBreeding.GetComponentInParent<DryerController>().getSlug();
                 targetBreeding.GetComponentInParent<DryerController>().empty();

@@ -8,6 +8,11 @@ public class SlugController : MonoBehaviour
     public float frictionConstant;
     public Rigidbody2D rb;
     public PlayerController player;
+    public SpriteRenderer spriteRenderer;
+    public Sprite slugSpriteF;
+    public Sprite slugSpriteR;
+    public Sprite slugSpriteB;
+    public Sprite slugSpriteL;
 
     private bool collectable;
     private Slug slug;
@@ -15,6 +20,8 @@ public class SlugController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        spriteRenderer.sprite = slugSpriteF;
+
         collectable = false;
 
         if (slug == null)
@@ -31,11 +38,11 @@ public class SlugController : MonoBehaviour
 
         gameObject.transform.localScale = new Vector3(1, 1, 1);
         if (slug.getSize() == 1)
-            gameObject.transform.localScale *= 0.4f;
+            gameObject.transform.localScale *= 0.15f;
         else if (slug.getSize() == 2)
-            gameObject.transform.localScale *= 0.7f;
+            gameObject.transform.localScale *= 0.2f;
         else if (slug.getSize() == 3)
-            gameObject.transform.localScale *= 1.1f;
+            gameObject.transform.localScale *= 1.25f;
     }
 
     // Update is called once per frame
@@ -54,29 +61,33 @@ public class SlugController : MonoBehaviour
     private void FixedUpdate()
     {
         // Friction
-        if (rb.velocity.x > 0) // Friction x pos
+        if (rb.velocity.x > 0) // Friction x pos and right velocity
         {
+            spriteRenderer.sprite = slugSpriteR;
             if (rb.velocity.x < frictionConstant)
                 rb.velocity = new Vector2(0, rb.velocity.y);
             else
                 rb.velocity = new Vector2(rb.velocity.x - frictionConstant, rb.velocity.y);
         }
-        if (rb.velocity.y > 0) // Friction y pos
+        if (rb.velocity.y > 0) // Friction y pos and backward velocity
         {
+            spriteRenderer.sprite = slugSpriteB;
             if (rb.velocity.y < frictionConstant)
                 rb.velocity = new Vector2(rb.velocity.x, 0);
             else
                 rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y - frictionConstant);
         }
-        if (rb.velocity.x < 0) // Friction x neg
+        if (rb.velocity.x < 0) // Friction x neg and left velocity
         {
+            spriteRenderer.sprite = slugSpriteL;
             if (rb.velocity.x > frictionConstant)
                 rb.velocity = new Vector2(0, rb.velocity.y);
             else
                 rb.velocity = new Vector2(rb.velocity.x + frictionConstant, rb.velocity.y);
         }
-        if (rb.velocity.y < 0) // Friction y neg
+        if (rb.velocity.y < 0) // Friction y neg and forward velocity
         {
+            spriteRenderer.sprite = slugSpriteL;
             if (rb.velocity.y > frictionConstant)
                 rb.velocity = new Vector2(rb.velocity.x, 0);
             else
@@ -94,8 +105,11 @@ public class SlugController : MonoBehaviour
         
         if (collision.gameObject.CompareTag("Breeding"))
         {
-            collision.gameObject.GetComponentInParent<BreedingController>().insertSlug(slug);
-            Destroy(gameObject);
+            if (!collision.gameObject.GetComponent<BreedingController>().isFull())
+            {
+                collision.gameObject.GetComponentInParent<BreedingController>().insertSlug(slug);
+                Destroy(gameObject);
+            }
         }
         if (collision.gameObject.CompareTag("Trash"))
         {
