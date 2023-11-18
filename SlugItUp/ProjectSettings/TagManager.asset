@@ -3,7 +3,14 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Breeding
+  - Feeder
+  - Submission
+  - Dryer
+  - Collector
+  - Trash
+  - submissionZone
   layers:
   - Default
   - TransparentFX

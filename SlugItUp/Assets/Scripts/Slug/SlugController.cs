@@ -5,7 +5,7 @@ using System;
 
 public class SlugController : MonoBehaviour
 {
-    public float frictionConstant;
+    public float FRICTION_CONSTANT;
     public Rigidbody2D rb;
     public PlayerController player;
     public SpriteRenderer spriteRenderer;
@@ -73,39 +73,39 @@ public class SlugController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);
         // Friction
         if (rb.velocity.x > 0) // Friction x pos and right velocity
         {
             spriteRenderer.sprite = slugSpriteR;
-            if (rb.velocity.x < frictionConstant)
+            if (rb.velocity.x < FRICTION_CONSTANT)
                 rb.velocity = new Vector2(0, rb.velocity.y);
             else
-                rb.velocity = new Vector2(rb.velocity.x - frictionConstant, rb.velocity.y);
+                rb.velocity = new Vector2(rb.velocity.x - FRICTION_CONSTANT, rb.velocity.y);
         }
         if (rb.velocity.y > 0) // Friction y pos and backward velocity
         {
             spriteRenderer.sprite = slugSpriteB;
-            if (rb.velocity.y < frictionConstant)
+            if (rb.velocity.y < FRICTION_CONSTANT)
                 rb.velocity = new Vector2(rb.velocity.x, 0);
             else
-                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y - frictionConstant);
+                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y - FRICTION_CONSTANT);
         }
         if (rb.velocity.x < 0) // Friction x neg and left velocity
         {
             spriteRenderer.sprite = slugSpriteL;
-            if (rb.velocity.x > frictionConstant)
+            if (rb.velocity.x > FRICTION_CONSTANT)
                 rb.velocity = new Vector2(0, rb.velocity.y);
             else
-                rb.velocity = new Vector2(rb.velocity.x + frictionConstant, rb.velocity.y);
+                rb.velocity = new Vector2(rb.velocity.x + FRICTION_CONSTANT, rb.velocity.y);
         }
         if (rb.velocity.y < 0) // Friction y neg and forward velocity
         {
             spriteRenderer.sprite = slugSpriteL;
-            if (rb.velocity.y > frictionConstant)
+            if (rb.velocity.y > FRICTION_CONSTANT)
                 rb.velocity = new Vector2(rb.velocity.x, 0);
             else
-                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + frictionConstant);
+                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + FRICTION_CONSTANT);
         }
     }
 

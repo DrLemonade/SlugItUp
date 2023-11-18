@@ -136,7 +136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f056378f39ab6a942b44c760ec53c617, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frictionConstant: 0.25
+  FRICTION_CONSTANT: 0.25
   rb: {fileID: 3613697417638751513}
   player: {fileID: 0}
   spriteRenderer: {fileID: 3613697417638751519}

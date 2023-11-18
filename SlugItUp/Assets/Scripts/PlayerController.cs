@@ -1,16 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
     public float speed = 4f;
     public float timeLimit;
     public float initVelocityMN;
+    public float Z_CONSTANT;
     public Rigidbody2D rb;
     public Slug heldSlug;
     public GameObject slugPreset;
     public GameObject slugSpriteObj;
+    public TMP_Text timerTxt;
+    public TMP_Text scoreTxt;
     public Animator animator;
 
     public Sprite slugSpriteL;
@@ -19,6 +23,7 @@ public class PlayerController : MonoBehaviour
     public Sprite slugSpriteF;
 
     private int direction; // 0 = forward, 1 = right, 2 = backward, 3 = left
+    private int score;
     private GameObject targetSlug = null; // The slug that the player targets to pick up
     private GameObject targetAppliance = null;
 
@@ -27,6 +32,7 @@ public class PlayerController : MonoBehaviour
     {
         heldSlug = null;
         direction = 0;
+        score = 0;
     }
 
     // Update is called once per frame
@@ -67,10 +73,18 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if ((int)(timeLimit - Time.time) % 60 < 10)
+        {
+            timerTxt.text = (int)(timeLimit - Time.time) / 60 + ":0" + (int)(timeLimit - Time.time) % 60;
+        }
+        else
+        {
+            timerTxt.text = (int)(timeLimit - Time.time) / 60 + ":" + (int)(timeLimit - Time.time) % 60;
+        }
         float moveHorizontal = Input.GetAxis("Horizontal")*speed;
         float moveVertical = Input.GetAxis("Vertical")*speed;
         rb.velocity = new Vector2(moveHorizontal, moveVertical);
-        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);
+        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y - Z_CONSTANT);
 
         if (moveHorizontal > 0)
         {
@@ -155,4 +169,10 @@ public class PlayerController : MonoBehaviour
     public void setTargetSlug(GameObject slug) { targetSlug = slug; }
 
     public GameObject getTargetSlug() { return targetSlug; }
+
+    public void addScore(int s)
+    {
+        score += s;
+        scoreTxt.text = score.ToString();
+    }
 }
