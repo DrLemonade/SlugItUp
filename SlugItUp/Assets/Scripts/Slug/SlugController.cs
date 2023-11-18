@@ -105,7 +105,7 @@ public class SlugController : MonoBehaviour
         
         if (collision.gameObject.CompareTag("Breeding"))
         {
-            if (!collision.gameObject.GetComponent<BreedingController>().isFull())
+            if (collision.gameObject.GetComponentInParent<BreedingController>().heldSlug2 == null)
             {
                 collision.gameObject.GetComponentInParent<BreedingController>().insertSlug(slug);
                 Destroy(gameObject);
