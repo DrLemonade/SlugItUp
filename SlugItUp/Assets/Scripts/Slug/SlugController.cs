@@ -6,6 +6,7 @@ using System;
 public class SlugController : MonoBehaviour
 {
     public float FRICTION_CONSTANT;
+    public float DROP_DELTA;
     public Rigidbody2D rb;
     public PlayerController player;
     public SpriteRenderer spriteRenderer;
@@ -13,8 +14,10 @@ public class SlugController : MonoBehaviour
     public Sprite slugSpriteR;
     public Sprite slugSpriteB;
     public Sprite slugSpriteL;
+    public GameObject waterDrop;
 
     private bool collectable;
+    private float lastTime = 0;
     private Slug slug;
 
     // Start is called before the first frame update
@@ -106,6 +109,14 @@ public class SlugController : MonoBehaviour
                 rb.velocity = new Vector2(rb.velocity.x, 0);
             else
                 rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + FRICTION_CONSTANT);
+        }
+
+        // Wet Particals if wet
+        if (!slug.getIsDry() && Time.time - lastTime > DROP_DELTA)
+        {
+            GameObject drop = Instantiate(waterDrop, this.transform);
+            drop.transform.position = new Vector2(UnityEngine.Random.Range(transform.position.x - .25f, transform.position.x + .25f), transform.position.y - .25f);
+            lastTime = Time.time;
         }
     }
 
