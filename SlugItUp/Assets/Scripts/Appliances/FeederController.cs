@@ -18,7 +18,7 @@ public class FeederController : ApplianceController
     {
         if (producedSlug == null && heldSlug != null && isTimeFinished()) 
         {
-            producedSlug = new Slug(heldSlug.getType(), (heldSlug.getSize() < 3 ? heldSlug.getSize() + 1 : 3), heldSlug.getIsDry());
+            producedSlug = new Slug(heldSlug.getType(), (heldSlug.getSize() < 3 ? heldSlug.getSize() + 1 : 3), heldSlug.getIsDry(), heldSlug.getScoreAddition());
             producedSlug.addScoreAddition();
             heldSlug = null;
 

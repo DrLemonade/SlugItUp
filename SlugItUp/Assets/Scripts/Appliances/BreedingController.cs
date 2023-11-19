@@ -26,7 +26,7 @@ public class BreedingController : ApplianceController
     {
         if (producedSlug == null && isTimeFinished())
         {
-            producedSlug = new Slug(Slug.getMixedType(heldSlug1.getType(), heldSlug2.getType()), 1, false);
+            producedSlug = new Slug(Slug.getMixedType(heldSlug1.getType(), heldSlug2.getType()), 1, false, heldSlug1.getScoreAddition());
             producedSlug.addScoreAddition();
             heldSlug1 = null;
             heldSlug2 = null;

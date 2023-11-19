@@ -28,7 +28,7 @@ public class SlugController : MonoBehaviour
         collectable = false;
 
         if (slug == null)
-            slug = new Slug((int) Math.Pow(2, UnityEngine.Random.Range(0, 3)), 1, false);
+            slug = new Slug((int) Math.Pow(2, UnityEngine.Random.Range(0, 3)), 1, false, 1);
 
         Color slugColor = Slug.getColorFromType(slug.getType());
 
@@ -133,13 +133,15 @@ public class SlugController : MonoBehaviour
         bool isBarrel = collision.gameObject.CompareTag("Submission");
         bool isFeeder = collision.gameObject.CompareTag("Feeder");
         bool isDryer = collision.gameObject.CompareTag("Dryer");
-        
-        if (isBreeder || isTrash || isBarrel || isFeeder || isDryer)
+
+        if (isBreeder || isBarrel || isFeeder || isDryer)
         {
             bool success = collision.gameObject.GetComponentInParent<ApplianceController>().insertSlug(slug);
             if (success)
                 Destroy(gameObject);
         }
+        else if (isTrash)
+            Destroy(gameObject);
     }
 
     private void OnTriggerExit2D(Collider2D collision)

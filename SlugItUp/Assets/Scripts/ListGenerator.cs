@@ -25,10 +25,18 @@ public class ListGenerator
     }
 
     public static Slug getRandomSlug() {
-        int type = (int) Math.Pow(2, UnityEngine.Random.Range(0, 3));
+        int type = UnityEngine.Random.Range(1, 8);
         int size = UnityEngine.Random.Range(1, 4);
         bool isDry = (UnityEngine.Random.Range(0, 2) == 0);
-        return new Slug(type, size, isDry);
+        return new Slug(type, size, isDry, 1);
+    }
+
+    public static Slug getRandomRGBSlug()
+    {
+        int type = (int)Math.Pow(2, UnityEngine.Random.Range(0, 3));
+        int size = UnityEngine.Random.Range(1, 4);
+        bool isDry = (UnityEngine.Random.Range(0, 2) == 0);
+        return new Slug(type, size, isDry, 1);
     }
 
 }

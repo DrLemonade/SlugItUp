@@ -18,7 +18,7 @@ public class DryerController : ApplianceController
     {
         if (producedSlug == null && heldSlug != null && isTimeFinished()) 
         {
-            producedSlug = new Slug(heldSlug.getType(), heldSlug.getSize(), true);
+            producedSlug = new Slug(heldSlug.getType(), heldSlug.getSize(), true, heldSlug.getScoreAddition());
             producedSlug.addScoreAddition();
             heldSlug = null;
 

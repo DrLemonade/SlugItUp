@@ -11,6 +11,11 @@ public class SubmissionTable : ApplianceController
     public Sprite fullSprite;
     public PlayerController player;
     public Rigidbody2D rb;
+    public GameObject label;
+    public GameObject bigSlug;
+    public GameObject medSlug;
+    public GameObject smlSlug;
+    public GameObject water;
 
     private bool locked;
     private bool correct;
@@ -19,9 +24,36 @@ public class SubmissionTable : ApplianceController
     void Start() 
     {
         requiredSlug = ListGenerator.getRandomSlug();
+
         locked = false;
 
         correct = false;
+
+        if (requiredSlug.getSize() == 1)
+        {
+            bigSlug.SetActive(false);
+            medSlug.SetActive(false);
+            smlSlug.GetComponent<SpriteRenderer>().color = Slug.getColorFromType(requiredSlug.getType());
+        }
+        if (requiredSlug.getSize() == 2)
+        {
+            bigSlug.SetActive(false);
+            smlSlug.SetActive(false);
+            medSlug.GetComponent<SpriteRenderer>().color = Slug.getColorFromType(requiredSlug.getType());
+        }
+        if (requiredSlug.getSize() == 3)
+        {
+            smlSlug.SetActive(false);
+            medSlug.SetActive(false);
+            bigSlug.GetComponent<SpriteRenderer>().color = Slug.getColorFromType(requiredSlug.getType());
+        }
+
+        if (requiredSlug.getIsDry())
+        {
+            water.SetActive(false);
+        }
+
+        label.SetActive(false);
 
         Debug.Log("Wanted slug: " + Slug.getSlugFullName(requiredSlug));
     }

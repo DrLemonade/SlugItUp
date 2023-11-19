@@ -125,6 +125,9 @@ public class PlayerController : MonoBehaviour
         {
             targetAppliance = collision.gameObject;
         }
+
+        if (isSubbmission)
+            collision.gameObject.GetComponentInParent<SubmissionTable>().label.SetActive(true);
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -133,6 +136,9 @@ public class PlayerController : MonoBehaviour
         {
             targetAppliance = null;
         }
+
+        if (collision.gameObject.CompareTag("Submission"))
+            collision.gameObject.GetComponentInParent<SubmissionTable>().label.SetActive(false);
     }
 
     public void HoldSlug(Slug slug)

@@ -16,12 +16,12 @@ public class Slug
     private int scoreAddition;
 
     // Creates a new slug
-    public Slug(int type, int size, bool isDry)
+    public Slug(int type, int size, bool isDry, int scoreAddition)
     {
         this.type = type;
         this.size = size;
         this.isDry = isDry;
-        scoreAddition = 1;
+        this.scoreAddition = scoreAddition;
     }
 
     // Returns this instances type variable value
