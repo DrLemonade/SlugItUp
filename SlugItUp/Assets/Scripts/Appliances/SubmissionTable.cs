@@ -13,12 +13,15 @@ public class SubmissionTable : ApplianceController
     public Rigidbody2D rb;
 
     private bool locked;
+    private bool correct;
     private Slug heldSlug;
 
     void Start() 
     {
         requiredSlug = ListGenerator.getRandomSlug();
         locked = false;
+
+        correct = false;
 
         Debug.Log("Wanted slug: " + Slug.getSlugFullName(requiredSlug));
     }
@@ -61,7 +64,10 @@ public class SubmissionTable : ApplianceController
     {
         if (collision.CompareTag("submissionZone") && heldSlug != null)
         {
-            player.addScore(heldSlug.getScoreAddition());
+            if (correct)
+                player.addScore(heldSlug.getScoreAddition());
+            else
+                player.addScore(-1);
             locked = true;
         }
     }
@@ -69,7 +75,10 @@ public class SubmissionTable : ApplianceController
     {
         if (collision.CompareTag("submissionZone") && heldSlug != null)
         {
-            player.addScore(-heldSlug.getScoreAddition());
+            if (correct)
+                player.addScore(heldSlug.getScoreAddition());
+            else
+                player.addScore(1);
             locked = false;
         }
     }
@@ -86,6 +95,7 @@ public class SubmissionTable : ApplianceController
 
         if (hasSameType && hasSameSize && hasSameWetness) 
         {
+            correct = true;
             Debug.Log("This was correct!");
             Debug.Log("You gave me: " + Slug.getSlugFullName(slug) + "!");
         } 
@@ -103,6 +113,7 @@ public class SubmissionTable : ApplianceController
     {
         if (!locked)
         {
+            correct = false;
             gameObject.GetComponent<SpriteRenderer>().sprite = emptySprite;
             if (heldSlug != null)
             {

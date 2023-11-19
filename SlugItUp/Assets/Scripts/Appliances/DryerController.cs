@@ -16,8 +16,8 @@ public class DryerController : ApplianceController
     {
         if (producedSlug == null && heldSlug != null && isTimeFinished()) 
         {
-            // Score addition? What triggers a score addition? I need more info!
             producedSlug = new Slug(heldSlug.getType(), heldSlug.getSize(), true);
+            producedSlug.addScoreAddition();
             heldSlug = null;
 
             gameObject.GetComponent<SpriteRenderer>().color = Color.white;
