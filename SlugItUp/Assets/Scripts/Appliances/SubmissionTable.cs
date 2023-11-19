@@ -85,28 +85,33 @@ public class SubmissionTable : ApplianceController
 
     public override bool insertSlug(Slug slug) 
     {
-        bool hasSameType = (requiredSlug.getType() == slug.getType());
-        bool hasSameSize = (requiredSlug.getSize() == slug.getSize());
-        bool hasSameWetness = (requiredSlug.getIsDry() == slug.getIsDry());
-
-        heldSlug = slug;
-
-        gameObject.GetComponent<SpriteRenderer>().sprite = fullSprite;
-
-        if (hasSameType && hasSameSize && hasSameWetness) 
+        if (heldSlug == null) 
         {
-            correct = true;
-            Debug.Log("This was correct!");
-            Debug.Log("You gave me: " + Slug.getSlugFullName(slug) + "!");
-        } 
-        else 
-        {
-            Debug.Log("This was wrong!");
-            Debug.Log("You gave me: " + Slug.getSlugFullName(slug));
-            Debug.Log("But I wanted: " + Slug.getSlugFullName(requiredSlug));
+            bool hasSameType = (requiredSlug.getType() == slug.getType());
+            bool hasSameSize = (requiredSlug.getSize() == slug.getSize());
+            bool hasSameWetness = (requiredSlug.getIsDry() == slug.getIsDry());
+
+            heldSlug = slug;
+
+            gameObject.GetComponent<SpriteRenderer>().sprite = fullSprite;
+
+            if (hasSameType && hasSameSize && hasSameWetness) 
+            {
+                correct = true;
+                Debug.Log("This was correct!");
+                Debug.Log("You gave me: " + Slug.getSlugFullName(slug) + "!");
+            } 
+            else 
+            {
+                Debug.Log("This was wrong!");
+                Debug.Log("You gave me: " + Slug.getSlugFullName(slug));
+                Debug.Log("But I wanted: " + Slug.getSlugFullName(requiredSlug));
+            }
+
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     public override Slug getSlug() 
@@ -114,7 +119,9 @@ public class SubmissionTable : ApplianceController
         if (!locked)
         {
             correct = false;
+
             gameObject.GetComponent<SpriteRenderer>().sprite = emptySprite;
+
             if (heldSlug != null)
             {
                 Slug temp = heldSlug;
@@ -122,6 +129,7 @@ public class SubmissionTable : ApplianceController
                 return temp;
             }
         }
+        
         return null;
     }
 
