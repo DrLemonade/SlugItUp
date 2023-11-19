@@ -49,7 +49,8 @@ public class PlayerController : MonoBehaviour
             sc.setSlugType(heldSlug);
             sc.player = transform.GetComponent<PlayerController>();
             Rigidbody2D slugRB = newSlug.GetComponent<Rigidbody2D>();
-            slugRB.velocity = new Vector2((Input.mousePosition.x - 585) / 50 - newSlug.transform.position.x, (Input.mousePosition.y - 250) / 45 - newSlug.transform.position.y);
+            int velocityDampen = 25;
+            slugRB.velocity = new Vector2((Input.mousePosition.x - Screen.width / 2) / velocityDampen, (Input.mousePosition.y - Screen.height / 2) / velocityDampen);
             heldSlug = null;
             slugSpriteObj.SetActive(false);
         } 

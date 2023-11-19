@@ -36,6 +36,7 @@ public class BreedingController : ApplianceController
             transform.localScale = new Vector2(0.1564078f, 0.1564078f);
             heldSlug1 = null;
             heldSlug2 = null;
+            gameObject.GetComponent<SpriteRenderer>().sprite = fullSprite;
         }
 
         if (producedSlug == null && !isTimeFinished() && heldSlug2 != null)
@@ -57,7 +58,6 @@ public class BreedingController : ApplianceController
             {
                 heldSlug2 = slug;
                 startTime = Time.time;
-                gameObject.GetComponent<SpriteRenderer>().sprite = fullSprite;
                 return true;
             }
         }

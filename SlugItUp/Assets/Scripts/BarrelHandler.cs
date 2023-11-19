@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class BarrelHandler : MonoBehaviour
 {
-    public GameObject newestBarrel;
+    public GameObject barrelPrefab;
     public GameObject player;
+
+    private GameObject newestBarrel;
 
     void Start() 
     {
-        newestBarrel = Instantiate(newestBarrel);
+        newestBarrel = Instantiate(barrelPrefab);
         newestBarrel.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);
         newestBarrel.GetComponentInParent<SubmissionTable>().player = player.GetComponentInParent<PlayerController>();
     }
@@ -17,7 +19,7 @@ public class BarrelHandler : MonoBehaviour
     void Update()
     {
         if (newestBarrel.GetComponentInParent<SubmissionTable>().isInsideSubmissionZone()) {
-            newestBarrel = Instantiate(newestBarrel);
+            newestBarrel = Instantiate(barrelPrefab);
             newestBarrel.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);
             newestBarrel.GetComponentInParent<SubmissionTable>().player = player.GetComponentInParent<PlayerController>();
         }
