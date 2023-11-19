@@ -12,6 +12,8 @@ public class BreedingController : ApplianceController
     // Start is called before the first frame update
     void Start()
     {
+        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);
+
         heldSlug1 = null;
         heldSlug2 = null;
         producedSlug = null;
