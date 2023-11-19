@@ -6,19 +6,24 @@ public class BreedingController : ApplianceController
 {
 
     // Instance variables
+    public float SCALE_CONSTANT;
     public Slug heldSlug1;
     public Slug heldSlug2;
+    public Sprite fullSprite;
+    public Sprite emptySprite;
+
+    private float orgScale;
 
     // Start is called before the first frame update
     void Start()
     {
         transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);
 
+        orgScale = transform.localScale.x;
+
         heldSlug1 = null;
         heldSlug2 = null;
         producedSlug = null;
-
-        gameObject.GetComponent<SpriteRenderer>().color = Color.black;
     }
 
     // Update is called once per frame
@@ -28,9 +33,14 @@ public class BreedingController : ApplianceController
         {
             producedSlug = new Slug(Slug.getMixedType(heldSlug1.getType(), heldSlug2.getType()), 1, false, heldSlug1.getScoreAddition());
             producedSlug.addScoreAddition();
+            transform.localScale = new Vector2(0.1564078f, 0.1564078f);
             heldSlug1 = null;
             heldSlug2 = null;
-            gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+        }
+
+        if (producedSlug == null && !isTimeFinished() && heldSlug2 != null)
+        {
+            transform.localScale = new Vector2(orgScale - orgScale * SCALE_CONSTANT * Mathf.Sin(Time.time) * Mathf.Sin(Time.time), orgScale - orgScale * SCALE_CONSTANT * Mathf.Cos(Time.time) * Mathf.Cos(Time.time));
         }
     }
     
@@ -47,6 +57,7 @@ public class BreedingController : ApplianceController
             {
                 heldSlug2 = slug;
                 startTime = Time.time;
+                gameObject.GetComponent<SpriteRenderer>().sprite = fullSprite;
                 return true;
             }
         }
@@ -58,7 +69,7 @@ public class BreedingController : ApplianceController
     {
         if (producedSlug != null) 
         {
-            gameObject.GetComponent<SpriteRenderer>().color = Color.black;
+            gameObject.GetComponent<SpriteRenderer>().sprite = emptySprite;
 
             startTime = 0;
 

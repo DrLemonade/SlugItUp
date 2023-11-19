@@ -4280,8 +4280,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 326477476}
     - target: {fileID: 2692840502039417873, guid: dac93e2b8de8cc74287d8bb6028faa9b, type: 3}
+      propertyPath: fullSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: fda36b6214dd12a49b0d120ba9d26da6, type: 3}
+    - target: {fileID: 2692840502039417873, guid: dac93e2b8de8cc74287d8bb6028faa9b, type: 3}
+      propertyPath: emptySprite
+      value: 
+      objectReference: {fileID: 21300000, guid: dcfd27469f2af184385e40a627d427dc, type: 3}
+    - target: {fileID: 2692840502039417873, guid: dac93e2b8de8cc74287d8bb6028faa9b, type: 3}
+      propertyPath: SCALE_CONSTANT
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2692840502039417873, guid: dac93e2b8de8cc74287d8bb6028faa9b, type: 3}
       propertyPath: applianceTimer
-      value: 1
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 2692840502039417874, guid: dac93e2b8de8cc74287d8bb6028faa9b, type: 3}
       propertyPath: m_Radius
