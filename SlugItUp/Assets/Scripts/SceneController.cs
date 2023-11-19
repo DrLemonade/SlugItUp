@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
+    public AudioClip selectSound;
+
     public void sceneEvent(int buildIndex)
     {
         SceneManager.LoadScene(sceneBuildIndex: buildIndex);
@@ -13,5 +15,15 @@ public class SceneController : MonoBehaviour
     public void exit()
     {
         Application.Quit();
+    }
+
+    public void playSelectSound()
+    {
+        gameObject.GetComponent<AudioSource>().PlayOneShot(selectSound);
+    }
+
+    public void resetScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

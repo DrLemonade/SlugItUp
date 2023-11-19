@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class DryerController : ApplianceController
 {
+    public float SCALE_CONSTANT;
+    public GameObject slugSprite;
 
+    private float orgScale;
     private Slug heldSlug;
 
     void Start()
     {
         transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);
-        
-        gameObject.GetComponent<SpriteRenderer>().color = Color.yellow;
+
+        orgScale = transform.localScale.x;
     }
 
     void Update() 
@@ -20,9 +23,13 @@ public class DryerController : ApplianceController
         {
             producedSlug = new Slug(heldSlug.getType(), heldSlug.getSize(), true, heldSlug.getScoreAddition());
             producedSlug.addScoreAddition();
+            transform.localScale = new Vector2(0.1564078f, 0.1564078f);
             heldSlug = null;
+        }
 
-            gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+        if (producedSlug == null && !isTimeFinished() && heldSlug != null)
+        {
+            transform.localScale = new Vector2(orgScale - orgScale * SCALE_CONSTANT * Mathf.Sin(Time.time) * Mathf.Sin(Time.time), orgScale - orgScale * SCALE_CONSTANT * Mathf.Cos(Time.time) * Mathf.Cos(Time.time));
         }
     }
 
@@ -30,6 +37,8 @@ public class DryerController : ApplianceController
     {
         if (heldSlug == null && producedSlug == null) 
         {
+            slugSprite.SetActive(true);
+            slugSprite.GetComponent<SpriteRenderer>().color = Slug.getColorFromType(slug.getType());
             heldSlug = slug;
             startTime = Time.time;
             return true;
@@ -42,9 +51,9 @@ public class DryerController : ApplianceController
     {
         if (producedSlug != null && isTimeFinished()) 
         {
-            gameObject.GetComponent<SpriteRenderer>().color = Color.yellow;
-
             startTime = 0;
+
+            slugSprite.SetActive(false);
 
             Slug temp = producedSlug;
             producedSlug = null;
@@ -54,6 +63,8 @@ public class DryerController : ApplianceController
         {
             if (heldSlug != null)
             {
+                slugSprite.SetActive(false);
+                transform.localScale = new Vector2(0.1564078f, 0.1564078f);
                 startTime = 0;
 
                 Slug temp = heldSlug;

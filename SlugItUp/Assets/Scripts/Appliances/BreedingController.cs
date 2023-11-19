@@ -81,6 +81,8 @@ public class BreedingController : ApplianceController
         {
             if (heldSlug2 != null) 
             {
+                gameObject.GetComponent<SpriteRenderer>().sprite = emptySprite;
+                transform.localScale = new Vector2(0.1564078f, 0.1564078f);
                 startTime = 0;
 
                 Slug temp = heldSlug2;

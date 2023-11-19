@@ -32,11 +32,6 @@ public class SlugController : MonoBehaviour
 
         Color slugColor = Slug.getColorFromType(slug.getType());
 
-        if (slug.getIsDry())
-            slugColor.a = 1f;
-        else
-            slugColor.a = 200f / 255f;
-
         SpriteRenderer sprite = GetComponent<SpriteRenderer>();
 
         sprite.color = slugColor;

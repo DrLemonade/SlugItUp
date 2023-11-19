@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
+    public float DROP_DELTA;
     public float speed = 4f;
     public float timeLimit;
     public float initVelocityMN;
@@ -13,19 +15,26 @@ public class PlayerController : MonoBehaviour
     public Slug heldSlug;
     public GameObject slugPreset;
     public GameObject slugSpriteObj;
+    public GameObject timer;
+    public GameObject timesUpScreen;
+    public GameObject scoreTxt;
+    public GameObject waterDrop;
     public TMP_Text timerTxt;
     public Animator animator;
     public AudioClip timeSound;
     public AudioClip squishSound;
 
-    public Sprite slugSpriteL;
+    // When holding which way slug is facing
+    public Sprite slugSpriteL; 
     public Sprite slugSpriteR;
     public Sprite slugSpriteB;
     public Sprite slugSpriteF;
 
     private int direction; // 0 = forward, 1 = right, 2 = backward, 3 = left
     private int score;
+    private float lastTime;
     private bool hasPlayedTimeSound;
+    private bool finishedGame;
     private GameObject targetSlug = null; // The slug that the player targets to pick up
     private GameObject targetAppliance = null;
 
@@ -34,96 +43,131 @@ public class PlayerController : MonoBehaviour
     {
         heldSlug = null;
         hasPlayedTimeSound = false;
+        finishedGame = false;
         direction = 0;
         score = 0;
+        timeLimit += Time.time;
     }
 
     // Update is called once per frame
     void Update()
     {
         // Move the camera to have the same x and y values as player position
-        Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z);
 
-        if(heldSlug != null && Input.GetKeyDown("e")) // Pick up slug from ground
+        if (Time.time > timeLimit && !finishedGame)
         {
-            GameObject newSlug = Instantiate(slugPreset);
-            newSlug.transform.position = new Vector2(transform.position.x, transform.position.y);
-            SlugController sc = newSlug.GetComponent<SlugController>();
-            sc.setSlugType(heldSlug);
-            sc.player = transform.GetComponent<PlayerController>();
-            Rigidbody2D slugRB = newSlug.GetComponent<Rigidbody2D>();
-            int velocityDampen = 25;
-            slugRB.velocity = new Vector2((Input.mousePosition.x - Screen.width / 2) / velocityDampen, (Input.mousePosition.y - Screen.height / 2) / velocityDampen);
-            heldSlug = null;
-            slugSpriteObj.SetActive(false);
-        } 
-        else if(heldSlug == null)
+            timesUpScreen.SetActive(true);
+        }
+        else
         {
-            if (Input.GetKeyDown("e")) 
+            if (heldSlug != null && Input.GetKeyDown("e")) // Pick up slug from ground
             {
-                if (targetAppliance != null) // Pick up slug from appliance
+                GameObject newSlug = Instantiate(slugPreset);
+                newSlug.transform.position = new Vector2(transform.position.x, transform.position.y);
+                SlugController sc = newSlug.GetComponent<SlugController>();
+                sc.setSlugType(heldSlug);
+                sc.player = transform.GetComponent<PlayerController>();
+                Rigidbody2D slugRB = newSlug.GetComponent<Rigidbody2D>();
+                int velocityDampen = 25;
+                slugRB.velocity = new Vector2((Input.mousePosition.x - Screen.width / 2) / velocityDampen, (Input.mousePosition.y - Screen.height / 2) / velocityDampen);
+                heldSlug = null;
+                slugSpriteObj.SetActive(false);
+            }
+            else if (heldSlug == null)
+            {
+                if (Input.GetKeyDown("e"))
                 {
-                    Slug s = targetAppliance.GetComponentInParent<ApplianceController>().getSlug();
-                    if (s != null) {
-                        HoldSlug(s);
-                        gameObject.GetComponent<AudioSource>().PlayOneShot(squishSound);
+                    if (targetAppliance != null) // Pick up slug from appliance
+                    {
+                        Slug s = targetAppliance.GetComponentInParent<ApplianceController>().getSlug();
+                        if (s != null)
+                        {
+                            HoldSlug(s);
+                            gameObject.GetComponent<AudioSource>().PlayOneShot(squishSound);
+                        }
                     }
                 }
             }
-        }
-
-        if (Time.time > timeLimit)
-        {
-            SceneController sceneController = new SceneController();
-            sceneController.sceneEvent(2);
         }
     }
 
     private void FixedUpdate()
     {
-        if ((int)(timeLimit - Time.time) % 60 < 10)
+        if (Time.time > timeLimit)
         {
-            timerTxt.text = (int)(timeLimit - Time.time) / 60 + ":0" + (int)(timeLimit - Time.time) % 60;
+            if (Int32.Parse(scoreTxt.GetComponent<TMP_Text>().text) < score)
+            {
+                scoreTxt.GetComponent<TMP_Text>().text = (Int32.Parse(scoreTxt.GetComponent<TMP_Text>().text) + 1).ToString();
+            }
+            scoreTxt.transform.localScale = new Vector2(1 - 1 * .2f * Mathf.Sin(Time.time) * Mathf.Sin(Time.time), 1 - 1 * .2f * Mathf.Cos(Time.time) * Mathf.Cos(Time.time));
+
         }
         else
         {
-            timerTxt.text = (int)(timeLimit - Time.time) / 60 + ":" + (int)(timeLimit - Time.time) % 60;
-        }
+            if ((int)(timeLimit - Time.time) % 60 < 10)
+            {
+                timerTxt.text = (int)(timeLimit - Time.time) / 60 + ":0" + (int)(timeLimit - Time.time) % 60;
+            }
+            else
+            {
+                timerTxt.text = (int)(timeLimit - Time.time) / 60 + ":" + (int)(timeLimit - Time.time) % 60;
+            }
 
-        if (timeLimit - Time.time < 10 && !hasPlayedTimeSound)
-        {
-            gameObject.GetComponent<AudioSource>().PlayOneShot(timeSound);
-            hasPlayedTimeSound = true;
-        }
+            if (timeLimit - Time.time < 10 && !hasPlayedTimeSound)
+            {
+                gameObject.GetComponent<AudioSource>().PlayOneShot(timeSound);
+                hasPlayedTimeSound = true;
+                if ((int)Time.time % 2 == 1)
+                {
+                    timer.GetComponent<TMP_Text>().color = Color.red;
+                }
+                else if((int)Time.time % 2 == 0)
+                {
+                    timer.GetComponent<TMP_Text>().color = Color.white;
+                }
+            }
 
-        float moveHorizontal = Input.GetAxis("Horizontal")*speed;
-        float moveVertical = Input.GetAxis("Vertical")*speed;
-        rb.velocity = new Vector2(moveHorizontal, moveVertical);
-        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y - Z_CONSTANT);
+            float moveHorizontal = Input.GetAxis("Horizontal") * speed;
+            float moveVertical = Input.GetAxis("Vertical") * speed;
+            rb.velocity = new Vector2(moveHorizontal, moveVertical);
+            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y - Z_CONSTANT);
 
-        if (moveHorizontal > 0)
-        {
-            direction = 1;
-            slugSpriteObj.GetComponent<SpriteRenderer>().sprite = slugSpriteR;
-        }
-        else if (moveHorizontal < 0)
-        {
-            direction = 3;
-            slugSpriteObj.GetComponent<SpriteRenderer>().sprite = slugSpriteL;
-        }
-        else if (moveVertical > 0)
-        {
-            direction = 2;
-            slugSpriteObj.GetComponent<SpriteRenderer>().sprite = slugSpriteB;
-        }
-        else if (moveVertical < 0)
-        {
-            direction = 0;
-            slugSpriteObj.GetComponent<SpriteRenderer>().sprite = slugSpriteF;
-        }
+            if (moveHorizontal > 0)
+            {
+                direction = 1;
+                slugSpriteObj.GetComponent<SpriteRenderer>().sprite = slugSpriteR;
+            }
+            else if (moveHorizontal < 0)
+            {
+                direction = 3;
+                slugSpriteObj.GetComponent<SpriteRenderer>().sprite = slugSpriteL;
+            }
+            else if (moveVertical > 0)
+            {
+                direction = 2;
+                slugSpriteObj.GetComponent<SpriteRenderer>().sprite = slugSpriteB;
+            }
+            else if (moveVertical < 0)
+            {
+                direction = 0;
+                slugSpriteObj.GetComponent<SpriteRenderer>().sprite = slugSpriteF;
+            }
 
-        animator.SetFloat("XVelocity", moveHorizontal);
-        animator.SetFloat("YVelocity", moveVertical);
+            animator.SetFloat("XVelocity", moveHorizontal);
+            animator.SetFloat("YVelocity", moveVertical);
+
+            timer.transform.localScale = new Vector2(0.74363f - 0.74363f * .2f * Mathf.Sin(Time.time) * Mathf.Sin(Time.time), 0.74363f - 0.74363f * .2f * Mathf.Cos(Time.time) * Mathf.Cos(Time.time));
+
+            if(heldSlug != null)
+            {
+                if (!heldSlug.getIsDry() && Time.time - lastTime > DROP_DELTA)
+                {
+                    GameObject drop = Instantiate(waterDrop, slugSpriteObj.transform);
+                    drop.transform.position = new Vector3(UnityEngine.Random.Range(slugSpriteObj.transform.position.x - .25f, slugSpriteObj.transform.position.x + .25f), transform.position.y + .3f, transform.position.y - .6f);
+                    lastTime = Time.time;
+                }
+            }
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision) // NOTE: Make a tag that is just "Appliance"
