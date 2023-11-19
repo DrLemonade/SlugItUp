@@ -14,8 +14,9 @@ public class PlayerController : MonoBehaviour
     public GameObject slugPreset;
     public GameObject slugSpriteObj;
     public TMP_Text timerTxt;
-    public TMP_Text scoreTxt;
     public Animator animator;
+    public AudioClip timeSound;
+    public AudioClip squishSound;
 
     public Sprite slugSpriteL;
     public Sprite slugSpriteR;
@@ -24,6 +25,7 @@ public class PlayerController : MonoBehaviour
 
     private int direction; // 0 = forward, 1 = right, 2 = backward, 3 = left
     private int score;
+    private bool hasPlayedTimeSound;
     private GameObject targetSlug = null; // The slug that the player targets to pick up
     private GameObject targetAppliance = null;
 
@@ -31,6 +33,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         heldSlug = null;
+        hasPlayedTimeSound = false;
         direction = 0;
         score = 0;
     }
@@ -63,6 +66,7 @@ public class PlayerController : MonoBehaviour
                     Slug s = targetAppliance.GetComponentInParent<ApplianceController>().getSlug();
                     if (s != null) {
                         HoldSlug(s);
+                        gameObject.GetComponent<AudioSource>().PlayOneShot(squishSound);
                     }
                 }
             }
@@ -85,6 +89,13 @@ public class PlayerController : MonoBehaviour
         {
             timerTxt.text = (int)(timeLimit - Time.time) / 60 + ":" + (int)(timeLimit - Time.time) % 60;
         }
+
+        if (timeLimit - Time.time < 10 && !hasPlayedTimeSound)
+        {
+            gameObject.GetComponent<AudioSource>().PlayOneShot(timeSound);
+            hasPlayedTimeSound = true;
+        }
+
         float moveHorizontal = Input.GetAxis("Horizontal")*speed;
         float moveVertical = Input.GetAxis("Vertical")*speed;
         rb.velocity = new Vector2(moveHorizontal, moveVertical);
@@ -145,6 +156,8 @@ public class PlayerController : MonoBehaviour
     public void HoldSlug(Slug slug)
     {
         slugSpriteObj.SetActive(true);
+
+        gameObject.GetComponent<AudioSource>().PlayOneShot(squishSound);
         
         Color slugColor = Slug.getColorFromType(slug.getType());
 
@@ -184,6 +197,5 @@ public class PlayerController : MonoBehaviour
     public void addScore(int s)
     {
         score += s;
-        scoreTxt.text = score.ToString();
     }
 }
