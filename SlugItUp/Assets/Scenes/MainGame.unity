@@ -2479,7 +2479,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23b7cfc8364af4c4b8e44337589ce0ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  period: 5
+  period: 20
   slugPreset: {fileID: 3613697417638751517, guid: c1c81283a7855f245aeff302361ec4de, type: 3}
   player: {fileID: 326477481}
 --- !u!4 &1267044057 stripped

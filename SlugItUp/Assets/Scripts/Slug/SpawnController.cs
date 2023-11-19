@@ -13,6 +13,9 @@ public class SpawnController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GameObject slug = Instantiate(slugPreset);
+        slug.transform.position = new Vector2(Random.Range(-8, -5), Random.Range(-4, -2));
+        slug.GetComponent<SlugController>().player = player;
         lastTime = Time.time;
     }
 
@@ -22,7 +25,7 @@ public class SpawnController : MonoBehaviour
         if(Time.time - lastTime > period)
         {
             GameObject slug = Instantiate(slugPreset);
-            slug.transform.position = new Vector2(Random.Range(-8, 9), Random.Range(-4, 5));
+            slug.transform.position = new Vector2(Random.Range(-8, -5), Random.Range(-4, -2));
             slug.GetComponent<SlugController>().player = player;
             lastTime = Time.time;
         }
