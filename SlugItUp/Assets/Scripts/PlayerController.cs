@@ -38,6 +38,9 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Move the camera to have the same x and y values as player position
+        Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z);
+
         if(heldSlug != null && Input.GetKeyDown("e")) // Pick up slug from ground
         {
             GameObject newSlug = Instantiate(slugPreset);

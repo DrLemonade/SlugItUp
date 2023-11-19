@@ -9,6 +9,8 @@ public class FeederController : ApplianceController
 
     void Start()
     {
+        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);
+        
         gameObject.GetComponent<SpriteRenderer>().color = Color.red;
     }
 

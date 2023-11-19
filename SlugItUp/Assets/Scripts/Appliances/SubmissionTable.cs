@@ -130,8 +130,12 @@ public class SubmissionTable : ApplianceController
                 return temp;
             }
         }
-        
+
         return null;
+    }
+
+    public bool isInsideSubmissionZone() {
+        return locked;
     }
 
 }
