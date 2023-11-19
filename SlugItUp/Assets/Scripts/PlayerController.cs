@@ -111,13 +111,14 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat("YVelocity", moveVertical);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision) // NOTE: This could be shortened with inheritance
+    private void OnTriggerEnter2D(Collider2D collision) // NOTE: Make a tag that is just "Appliance"
     {
         bool isBreeder = collision.gameObject.CompareTag("Breeding");
         bool isFeeder = collision.gameObject.CompareTag("Feeder");
         bool isDryer = collision.gameObject.CompareTag("Dryer");
+        bool isSubbmission = collision.gameObject.CompareTag("Submission");
 
-        if (isBreeder || isFeeder || isDryer)
+        if (isBreeder || isFeeder || isDryer || isSubbmission)
         {
             targetAppliance = collision.gameObject;
         }

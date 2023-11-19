@@ -62,7 +62,7 @@ public class SubmissionTable : ApplianceController
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("submissionZone") && heldSlug != null)
+        if (collision.CompareTag("submissionZone") && heldSlug != null && !locked)
         {
             if (correct)
                 player.addScore(heldSlug.getScoreAddition());
@@ -71,9 +71,10 @@ public class SubmissionTable : ApplianceController
             locked = true;
         }
     }
+
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("submissionZone") && heldSlug != null)
+        if (collision.CompareTag("submissionZone") && heldSlug != null && locked)
         {
             if (correct)
                 player.addScore(heldSlug.getScoreAddition());
