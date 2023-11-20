@@ -18,8 +18,12 @@ public class SlugWaterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Time.time - last_time > EXIST_TIME)
+        if (Time.time - last_time > EXIST_TIME) 
+        {
             Destroy(gameObject);
+            return;
+        }
+        
         gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, speed * ((Time.time - last_time) - EXIST_TIME));
         Color color = gameObject.GetComponent<SpriteRenderer>().color;
         color.a = 1 - (Time.time - last_time) / EXIST_TIME;

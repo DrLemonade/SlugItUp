@@ -6,41 +6,47 @@ using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
-    public float DROP_DELTA;
-    public float speed = 4f;
-    public float timeLimit;
-    public float initVelocityMN;
-    public float Z_CONSTANT;
-    public Rigidbody2D rb;
+    public float dropDeltaTime;
+    public float zOffsetFromY;
+    public float speed;
     public Slug heldSlug;
     public GameObject slugPreset;
     public GameObject slugSpriteObj;
-    public GameObject timer;
-    public GameObject timesUpScreen;
-    public GameObject scoreTxt;
     public GameObject waterDrop;
     public TMP_Text timerTxt;
-    public Animator animator;
     public AudioClip timeSound;
     public AudioClip squishSound;
 
-    // When holding which way slug is facing
+    // Refactor to different script
+    public float timeLimit;
+    public GameObject timer;
+    public GameObject timesUpScreen;
+    public GameObject scoreTxt;
     public Sprite slugSpriteL; 
     public Sprite slugSpriteR;
     public Sprite slugSpriteB;
     public Sprite slugSpriteF;
-
-    private int direction; // 0 = forward, 1 = right, 2 = backward, 3 = left
     private int score;
-    private float lastTime;
-    private bool hasPlayedTimeSound;
     private bool finishedGame;
+
+    // *** Private instances variables ***
+
+    private Rigidbody2D rb;
+    private Animator animator;
+
     private GameObject targetSlug = null; // The slug that the player targets to pick up
     private GameObject targetAppliance = null;
+
+    private int direction; // 0 = forward, 1 = right, 2 = backward, 3 = left
+    private float timeSinceLastDrop;
+    private bool hasPlayedTimeSound;
 
     // Start is called before the first frame update
     void Start()
     {
+        rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+
         heldSlug = null;
         hasPlayedTimeSound = false;
         finishedGame = false;
@@ -70,7 +76,7 @@ public class PlayerController : MonoBehaviour
                 sc.setSlugType(heldSlug);
                 sc.player = transform.GetComponent<PlayerController>();
                 Rigidbody2D slugRB = newSlug.GetComponent<Rigidbody2D>();
-                int velocityDampen = 25;
+                int velocityDampen = 5;
                 slugRB.velocity = new Vector2((Input.mousePosition.x - Screen.width / 2) / velocityDampen, (Input.mousePosition.y - Screen.height / 2) / velocityDampen);
                 heldSlug = null;
                 slugSpriteObj.SetActive(false);
@@ -132,7 +138,7 @@ public class PlayerController : MonoBehaviour
             float moveHorizontal = Input.GetAxis("Horizontal") * speed;
             float moveVertical = Input.GetAxis("Vertical") * speed;
             rb.velocity = new Vector2(moveHorizontal, moveVertical);
-            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y - Z_CONSTANT);
+            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y - zOffsetFromY);
 
             if (moveHorizontal > 0)
             {
@@ -158,15 +164,16 @@ public class PlayerController : MonoBehaviour
             animator.SetFloat("XVelocity", moveHorizontal);
             animator.SetFloat("YVelocity", moveVertical);
 
+            // Magic number 0.74363f is the original scale of timer text
             timer.transform.localScale = new Vector2(0.74363f - 0.74363f * .2f * Mathf.Sin(Time.time) * Mathf.Sin(Time.time), 0.74363f - 0.74363f * .2f * Mathf.Cos(Time.time) * Mathf.Cos(Time.time));
 
             if(heldSlug != null)
             {
-                if (!heldSlug.getIsDry() && Time.time - lastTime > DROP_DELTA)
+                if (!heldSlug.getIsDry() && Time.time - timeSinceLastDrop > dropDeltaTime)
                 {
                     GameObject drop = Instantiate(waterDrop, slugSpriteObj.transform);
-                    drop.transform.position = new Vector3(UnityEngine.Random.Range(slugSpriteObj.transform.position.x - .25f, slugSpriteObj.transform.position.x + .25f), transform.position.y + .3f, transform.position.y - .6f);
-                    lastTime = Time.time;
+                    drop.transform.localPosition = new Vector3(UnityEngine.Random.Range(-drop.transform.localScale.x * 2, drop.transform.localScale.x * 2), drop.transform.localScale.y, -0.001f);
+                    timeSinceLastDrop = Time.time;
                 }
             }
         }

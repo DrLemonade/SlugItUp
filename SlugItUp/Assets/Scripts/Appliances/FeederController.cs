@@ -28,6 +28,8 @@ public class FeederController : ApplianceController
             producedSlug.addScoreAddition();
             transform.localScale = new Vector2(0.1564078f, 0.1564078f);
             heldSlug = null;
+            
+            gameObject.GetComponent<SpriteRenderer>().sprite = fullSprite;
         }
 
         if (producedSlug == null && !isTimeFinished() && heldSlug != null)
@@ -40,7 +42,6 @@ public class FeederController : ApplianceController
     {
         if (heldSlug == null && producedSlug == null) 
         {
-            gameObject.GetComponent<SpriteRenderer>().sprite = fullSprite;
             heldSlug = slug;
             startTime = Time.time;
             return true;

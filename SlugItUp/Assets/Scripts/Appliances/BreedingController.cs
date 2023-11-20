@@ -11,13 +11,18 @@ public class BreedingController : ApplianceController
     public Slug heldSlug2;
     public Sprite fullSprite;
     public Sprite emptySprite;
+    public GameObject displayColor1;
+    public GameObject displayColor2;
 
     private float orgScale;
+    private Color noneColor;
 
     // Start is called before the first frame update
     void Start()
     {
         transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);
+
+        noneColor = new Vector4(100 / 255f, 100 / 255f, 100 / 255f, 150 / 255f);
 
         orgScale = transform.localScale.x;
 
@@ -33,10 +38,13 @@ public class BreedingController : ApplianceController
         {
             producedSlug = new Slug(Slug.getMixedType(heldSlug1.getType(), heldSlug2.getType()), 1, false, heldSlug1.getScoreAddition());
             producedSlug.addScoreAddition();
-            transform.localScale = new Vector2(0.1564078f, 0.1564078f);
+            transform.localScale = new Vector2(orgScale, orgScale);
             heldSlug1 = null;
             heldSlug2 = null;
             gameObject.GetComponent<SpriteRenderer>().sprite = fullSprite;
+
+            displayColor1.GetComponentInParent<SpriteRenderer>().color = Slug.getColorFromType(producedSlug.getType());
+            displayColor2.GetComponentInParent<SpriteRenderer>().color = Slug.getColorFromType(producedSlug.getType());
         }
 
         if (producedSlug == null && !isTimeFinished() && heldSlug2 != null)
@@ -52,11 +60,13 @@ public class BreedingController : ApplianceController
             if (heldSlug1 == null) 
             {
                 heldSlug1 = slug;
+                displayColor1.GetComponentInParent<SpriteRenderer>().color = Slug.getColorFromType(heldSlug1.getType());
                 return true;
             }
             else if (heldSlug2 == null)
             {
                 heldSlug2 = slug;
+                displayColor2.GetComponentInParent<SpriteRenderer>().color = Slug.getColorFromType(heldSlug2.getType());
                 startTime = Time.time;
                 return true;
             }
@@ -71,6 +81,9 @@ public class BreedingController : ApplianceController
         {
             gameObject.GetComponent<SpriteRenderer>().sprite = emptySprite;
 
+            displayColor1.GetComponentInParent<SpriteRenderer>().color = noneColor;
+            displayColor2.GetComponentInParent<SpriteRenderer>().color = noneColor;
+
             startTime = 0;
 
             Slug temp = producedSlug;
@@ -82,7 +95,11 @@ public class BreedingController : ApplianceController
             if (heldSlug2 != null) 
             {
                 gameObject.GetComponent<SpriteRenderer>().sprite = emptySprite;
-                transform.localScale = new Vector2(0.1564078f, 0.1564078f);
+
+                displayColor2.GetComponentInParent<SpriteRenderer>().color = noneColor;
+
+                transform.localScale = new Vector2(orgScale, orgScale);
+
                 startTime = 0;
 
                 Slug temp = heldSlug2;
@@ -93,6 +110,8 @@ public class BreedingController : ApplianceController
             {
                 if (heldSlug1 != null)
                 {
+                    displayColor1.GetComponentInParent<SpriteRenderer>().color = noneColor;
+
                     startTime = 0;
 
                     Slug temp = heldSlug1;

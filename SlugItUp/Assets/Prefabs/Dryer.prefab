@@ -101,9 +101,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -1.0249711}
+  m_Offset: {x: 0, y: -0.2}
   serializedVersion: 2
-  m_Radius: 2.660808
+  m_Radius: 4
 --- !u!114 &4419082226795284697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,6 +119,8 @@ MonoBehaviour:
   applianceTimer: 10
   SCALE_CONSTANT: 0.2
   slugSprite: {fileID: 7573259086459742665}
+  waterDrop: {fileID: 8011947153194766888, guid: f858d7f23fe61f4459cd3ecf0ba94fe6, type: 3}
+  dropDeltaTime: 0.25
 --- !u!1 &7573259086459742665
 GameObject:
   m_ObjectHideFlags: 0
@@ -248,6 +250,6 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.33239925, y: -0.37988427}
+  m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 5.2561
+  m_Radius: 1

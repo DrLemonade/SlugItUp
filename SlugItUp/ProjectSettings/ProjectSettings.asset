@@ -635,11 +635,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 3c75db47-9d57-47eb-9da5-01376dd33e57
+  cloudProjectId: ef0141b7-7960-428e-ae8c-65f30c4b6654
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: SlugItUp
-  organizationId: drlemonade
+  projectName: SlugItUp (1)
+  organizationId: demonlord231
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   playerDataPath: 

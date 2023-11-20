@@ -6,6 +6,10 @@ public class DryerController : ApplianceController
 {
     public float SCALE_CONSTANT;
     public GameObject slugSprite;
+    public GameObject waterDrop;
+    public float dropDeltaTime;
+
+    private float timeSinceLastDrop;
 
     private float orgScale;
     private Slug heldSlug;
@@ -23,13 +27,20 @@ public class DryerController : ApplianceController
         {
             producedSlug = new Slug(heldSlug.getType(), heldSlug.getSize(), true, heldSlug.getScoreAddition());
             producedSlug.addScoreAddition();
-            transform.localScale = new Vector2(0.1564078f, 0.1564078f);
+            transform.localScale = new Vector2(orgScale, orgScale);
             heldSlug = null;
         }
 
         if (producedSlug == null && !isTimeFinished() && heldSlug != null)
         {
             transform.localScale = new Vector2(orgScale - orgScale * SCALE_CONSTANT * Mathf.Sin(Time.time) * Mathf.Sin(Time.time), orgScale - orgScale * SCALE_CONSTANT * Mathf.Cos(Time.time) * Mathf.Cos(Time.time));
+
+            if (!heldSlug.getIsDry() && Time.time - timeSinceLastDrop > dropDeltaTime)
+            {
+                GameObject drop = Instantiate(waterDrop, slugSprite.transform);
+                drop.transform.localPosition = new Vector3(UnityEngine.Random.Range(-drop.transform.localScale.x * 2, drop.transform.localScale.x * 2), drop.transform.localScale.y, -0.001f);
+                timeSinceLastDrop = Time.time;
+            }
         }
     }
 
@@ -64,7 +75,7 @@ public class DryerController : ApplianceController
             if (heldSlug != null)
             {
                 slugSprite.SetActive(false);
-                transform.localScale = new Vector2(0.1564078f, 0.1564078f);
+                transform.localScale = new Vector2(orgScale, orgScale);
                 startTime = 0;
 
                 Slug temp = heldSlug;

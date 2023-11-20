@@ -7,11 +7,14 @@ public class SubmissionTable : ApplianceController
     public float FRICTION_CONSTANT;
     public float Z_CONSTANT;
     public static Slug requiredSlug;
+    public PlayerController player;
+
     public Sprite emptySprite;
     public Sprite fullSprite;
-    public PlayerController player;
-    public Rigidbody2D rb;
+    
+    // Label variables
     public GameObject label;
+    public GameObject slugBackground;
     public GameObject bigSlug;
     public GameObject medSlug;
     public GameObject smlSlug;
@@ -21,37 +24,30 @@ public class SubmissionTable : ApplianceController
     private bool correct;
     private Slug heldSlug;
 
+    private Rigidbody2D rb;
+
     void Start() 
     {
+        rb = GetComponent<Rigidbody2D>();
+
         requiredSlug = ListGenerator.getRandomSlug();
 
         locked = false;
 
         correct = false;
 
-        if (requiredSlug.getSize() == 1)
-        {
-            bigSlug.SetActive(false);
-            medSlug.SetActive(false);
-            smlSlug.GetComponent<SpriteRenderer>().color = Slug.getColorFromType(requiredSlug.getType());
-        }
-        if (requiredSlug.getSize() == 2)
-        {
-            bigSlug.SetActive(false);
-            smlSlug.SetActive(false);
-            medSlug.GetComponent<SpriteRenderer>().color = Slug.getColorFromType(requiredSlug.getType());
-        }
-        if (requiredSlug.getSize() == 3)
-        {
-            smlSlug.SetActive(false);
-            medSlug.SetActive(false);
-            bigSlug.GetComponent<SpriteRenderer>().color = Slug.getColorFromType(requiredSlug.getType());
-        }
+        smlSlug.SetActive(requiredSlug.getSize() == 1);
+        medSlug.SetActive(requiredSlug.getSize() == 2);
+        bigSlug.SetActive(requiredSlug.getSize() == 3);
 
-        if (requiredSlug.getIsDry())
-        {
-            water.SetActive(false);
-        }
+        Color slugColor = Slug.getColorFromType(requiredSlug.getType());
+
+        GameObject slugToUse = (requiredSlug.getSize() == 1 ? smlSlug : (requiredSlug.getSize() == 2 ? medSlug : (requiredSlug.getSize() == 3 ? bigSlug : null)));
+        slugToUse.GetComponent<SpriteRenderer>().color = slugColor;
+        
+        slugBackground.GetComponent<SpriteRenderer>().color = new Vector4(slugColor.r, slugColor.g, slugColor.b, 0.8f);
+
+        water.SetActive(!requiredSlug.getIsDry());
 
         label.SetActive(false);
 
@@ -61,6 +57,7 @@ public class SubmissionTable : ApplianceController
     void FixedUpdate()
     {
         transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y - Z_CONSTANT);
+
         // Friction
         if (rb.velocity.x > 0) // Friction x pos and right velocity
         {

@@ -103,7 +103,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 2.98
+  m_Radius: 3
 --- !u!50 &3613697417638751513
 Rigidbody2D:
   serializedVersion: 4
@@ -137,7 +137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f056378f39ab6a942b44c760ec53c617, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FRICTION_CONSTANT: 0.25
+  FRICTION_CONSTANT: 0.85
   DROP_DELTA: 0.5
   rb: {fileID: 3613697417638751513}
   player: {fileID: 0}
@@ -147,7 +147,6 @@ MonoBehaviour:
   slugSpriteB: {fileID: 102755570, guid: 2e346981d069444dfb8d4fe34580526b, type: 3}
   slugSpriteL: {fileID: 1836484183, guid: 2e346981d069444dfb8d4fe34580526b, type: 3}
   waterDrop: {fileID: 8011947153194766888, guid: f858d7f23fe61f4459cd3ecf0ba94fe6, type: 3}
-  squishSound: {fileID: 8300000, guid: aefa334a5bff5bc40a37591eeaf70032, type: 3}
 --- !u!82 &-1474600621309722658
 AudioSource:
   m_ObjectHideFlags: 0
