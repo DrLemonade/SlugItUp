@@ -47,6 +47,8 @@ public class PlayerController : MonoBehaviour
         direction = 0;
         score = 0;
         timeLimit += Time.time;
+        Debug.Log(Screen.width);
+        Debug.Log(Screen.height);
     }
 
     // Update is called once per frame
