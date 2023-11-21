@@ -4,12 +4,8 @@ using UnityEngine;
 
 public class DryerController : ApplianceController
 {
-    public float SCALE_CONSTANT;
+    public float scaleAmount;
     public GameObject slugSprite;
-    public GameObject waterDrop;
-    public float dropDeltaTime;
-
-    private float timeSinceLastDrop;
 
     private float orgScale;
     private Slug heldSlug;
@@ -27,20 +23,13 @@ public class DryerController : ApplianceController
         {
             producedSlug = new Slug(heldSlug.getType(), heldSlug.getSize(), true, heldSlug.getScoreAddition());
             producedSlug.addScoreAddition();
-            transform.localScale = new Vector2(orgScale, orgScale);
+            transform.localScale = new Vector3(orgScale, orgScale, transform.localScale.z);
             heldSlug = null;
         }
 
         if (producedSlug == null && !isTimeFinished() && heldSlug != null)
         {
-            transform.localScale = new Vector2(orgScale - orgScale * SCALE_CONSTANT * Mathf.Sin(Time.time) * Mathf.Sin(Time.time), orgScale - orgScale * SCALE_CONSTANT * Mathf.Cos(Time.time) * Mathf.Cos(Time.time));
-
-            if (!heldSlug.getIsDry() && Time.time - timeSinceLastDrop > dropDeltaTime)
-            {
-                GameObject drop = Instantiate(waterDrop, slugSprite.transform);
-                drop.transform.localPosition = new Vector3(UnityEngine.Random.Range(-drop.transform.localScale.x * 2, drop.transform.localScale.x * 2), drop.transform.localScale.y, -0.001f);
-                timeSinceLastDrop = Time.time;
-            }
+            transform.localScale = new Vector3(orgScale - orgScale * scaleAmount * Mathf.Sin(Time.time) * Mathf.Sin(Time.time), orgScale - orgScale * scaleAmount * Mathf.Cos(Time.time) * Mathf.Cos(Time.time), transform.localScale.z);
         }
     }
 
@@ -49,7 +38,9 @@ public class DryerController : ApplianceController
         if (heldSlug == null && producedSlug == null) 
         {
             slugSprite.SetActive(true);
+            slugSprite.GetComponent<Drippy>().setDoDripping(!slug.getIsDry());
             slugSprite.GetComponent<SpriteRenderer>().color = Slug.getColorFromType(slug.getType());
+
             heldSlug = slug;
             startTime = Time.time;
             return true;
@@ -63,7 +54,6 @@ public class DryerController : ApplianceController
         if (producedSlug != null && isTimeFinished()) 
         {
             startTime = 0;
-
             slugSprite.SetActive(false);
 
             Slug temp = producedSlug;
@@ -74,9 +64,10 @@ public class DryerController : ApplianceController
         {
             if (heldSlug != null)
             {
-                slugSprite.SetActive(false);
-                transform.localScale = new Vector2(orgScale, orgScale);
                 startTime = 0;
+                slugSprite.SetActive(false);
+
+                transform.localScale = new Vector3(orgScale, orgScale, transform.localScale.z);
 
                 Slug temp = heldSlug;
                 heldSlug = null;

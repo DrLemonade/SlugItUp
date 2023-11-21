@@ -27,8 +27,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6004690972616388493}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.61, y: -3.41, z: 0}
-  m_LocalScale: {x: 0.14755733, y: 0.14755733, z: 0.14755733}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.15, y: 0.15, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4447983320690956525}
@@ -119,8 +119,6 @@ MonoBehaviour:
   applianceTimer: 10
   SCALE_CONSTANT: 0.2
   slugSprite: {fileID: 7573259086459742665}
-  waterDrop: {fileID: 8011947153194766888, guid: f858d7f23fe61f4459cd3ecf0ba94fe6, type: 3}
-  dropDeltaTime: 0.25
 --- !u!1 &7573259086459742665
 GameObject:
   m_ObjectHideFlags: 0
@@ -131,6 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5663558196953932180}
   - component: {fileID: 8931918814519050880}
+  - component: {fileID: 6132993082131454050}
   m_Layer: 0
   m_Name: Slug_1
   m_TagString: Untagged
@@ -205,6 +204,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &6132993082131454050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7573259086459742665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e91fb5cdba144530a1dc3587c9c0c5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dropDeltaTime: 0.25
+  waterDropPrefab: {fileID: 8011947153194766888, guid: f858d7f23fe61f4459cd3ecf0ba94fe6, type: 3}
 --- !u!1 &8641388601350268013
 GameObject:
   m_ObjectHideFlags: 0

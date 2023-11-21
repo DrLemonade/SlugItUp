@@ -6,23 +6,20 @@ public class BreedingController : ApplianceController
 {
 
     // Instance variables
-    public float SCALE_CONSTANT;
-    public Slug heldSlug1;
-    public Slug heldSlug2;
+    public float scaleAmount;
     public Sprite fullSprite;
     public Sprite emptySprite;
     public GameObject displayColor1;
     public GameObject displayColor2;
+    public GameObject displayColor3;
 
+    private Slug heldSlug1;
+    private Slug heldSlug2;
     private float orgScale;
-    private Color noneColor;
-
-    // Start is called before the first frame update
+    
     void Start()
     {
         transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);
-
-        noneColor = new Vector4(100 / 255f, 100 / 255f, 100 / 255f, 150 / 255f);
 
         orgScale = transform.localScale.x;
 
@@ -31,25 +28,29 @@ public class BreedingController : ApplianceController
         producedSlug = null;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (producedSlug == null && isTimeFinished())
         {
-            producedSlug = new Slug(Slug.getMixedType(heldSlug1.getType(), heldSlug2.getType()), 1, false, heldSlug1.getScoreAddition());
-            producedSlug.addScoreAddition();
-            transform.localScale = new Vector2(orgScale, orgScale);
             heldSlug1 = null;
             heldSlug2 = null;
+
+            producedSlug = new Slug(Slug.getMixedType(heldSlug1.getType(), heldSlug2.getType()), 1, false, heldSlug1.getScoreAddition());
+            producedSlug.addScoreAddition();
+            
+            transform.localScale = new Vector3(orgScale, orgScale, transform.localScale.z);
+        
             gameObject.GetComponent<SpriteRenderer>().sprite = fullSprite;
 
-            displayColor1.GetComponentInParent<SpriteRenderer>().color = Slug.getColorFromType(producedSlug.getType());
-            displayColor2.GetComponentInParent<SpriteRenderer>().color = Slug.getColorFromType(producedSlug.getType());
+            displayColor1.SetActive(false);
+            displayColor2.SetActive(false);
+            displayColor3.SetActive(true);
+            displayColor3.GetComponentInParent<SpriteRenderer>().color = Slug.getColorFromType(producedSlug.getType());
         }
 
         if (producedSlug == null && !isTimeFinished() && heldSlug2 != null)
         {
-            transform.localScale = new Vector2(orgScale - orgScale * SCALE_CONSTANT * Mathf.Sin(Time.time) * Mathf.Sin(Time.time), orgScale - orgScale * SCALE_CONSTANT * Mathf.Cos(Time.time) * Mathf.Cos(Time.time));
+            transform.localScale = new Vector3(orgScale - orgScale * scaleAmount * Mathf.Sin(Time.time) * Mathf.Sin(Time.time), orgScale - orgScale * scaleAmount * Mathf.Cos(Time.time) * Mathf.Cos(Time.time), transform.localScale.z);
         }
     }
     
@@ -60,13 +61,19 @@ public class BreedingController : ApplianceController
             if (heldSlug1 == null) 
             {
                 heldSlug1 = slug;
+                displayColor1.SetActive(true);
+
                 displayColor1.GetComponentInParent<SpriteRenderer>().color = Slug.getColorFromType(heldSlug1.getType());
+
                 return true;
             }
             else if (heldSlug2 == null)
             {
                 heldSlug2 = slug;
+                displayColor2.SetActive(true);
+
                 displayColor2.GetComponentInParent<SpriteRenderer>().color = Slug.getColorFromType(heldSlug2.getType());
+
                 startTime = Time.time;
                 return true;
             }
@@ -75,16 +82,17 @@ public class BreedingController : ApplianceController
         return false;
     }
 
-    public override Slug getSlug() // For the record, this way of styling the if-statements makes me wanna puke.
+    public override Slug getSlug()
     {
         if (producedSlug != null) 
         {
+            startTime = 0;
+
             gameObject.GetComponent<SpriteRenderer>().sprite = emptySprite;
 
-            displayColor1.GetComponentInParent<SpriteRenderer>().color = noneColor;
-            displayColor2.GetComponentInParent<SpriteRenderer>().color = noneColor;
-
-            startTime = 0;
+            displayColor1.SetActive(false);
+            displayColor2.SetActive(false);
+            displayColor3.SetActive(false);
 
             Slug temp = producedSlug;
             producedSlug = null;
@@ -94,13 +102,13 @@ public class BreedingController : ApplianceController
         {
             if (heldSlug2 != null) 
             {
+                startTime = 0;
+
                 gameObject.GetComponent<SpriteRenderer>().sprite = emptySprite;
 
-                displayColor2.GetComponentInParent<SpriteRenderer>().color = noneColor;
+                displayColor2.SetActive(false);
 
-                transform.localScale = new Vector2(orgScale, orgScale);
-
-                startTime = 0;
+                transform.localScale = new Vector3(orgScale, orgScale, transform.localScale.z);
 
                 Slug temp = heldSlug2;
                 heldSlug2 = null;
@@ -110,9 +118,9 @@ public class BreedingController : ApplianceController
             {
                 if (heldSlug1 != null)
                 {
-                    displayColor1.GetComponentInParent<SpriteRenderer>().color = noneColor;
-
                     startTime = 0;
+                    
+                    displayColor1.SetActive(false);
 
                     Slug temp = heldSlug1;
                     heldSlug1 = null;

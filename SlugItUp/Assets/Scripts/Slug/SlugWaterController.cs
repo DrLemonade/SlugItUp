@@ -4,29 +4,33 @@ using UnityEngine;
 
 public class SlugWaterController : MonoBehaviour
 {
-    public float EXIST_TIME;
+    public float existTime;
     public float speed;
 
-    private float last_time;
+    private float timeSinceLastDrop;
 
     // Start is called before the first frame update
     void Start()
     {
-        last_time = Time.time;
+        timeSinceLastDrop = Time.time;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Time.time - last_time > EXIST_TIME) 
+        // Destroy self if existTime has passed
+        if (Time.time - timeSinceLastDrop > existTime) 
         {
             Destroy(gameObject);
             return;
         }
         
-        gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, speed * ((Time.time - last_time) - EXIST_TIME));
+        // Make drop slower over time
+        gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, speed * ((Time.time - timeSinceLastDrop) - existTime));
+
+        // Make drop more transparent over time
         Color color = gameObject.GetComponent<SpriteRenderer>().color;
-        color.a = 1 - (Time.time - last_time) / EXIST_TIME;
+        color.a = 1 - (Time.time - timeSinceLastDrop) / existTime;
         gameObject.GetComponent<SpriteRenderer>().color = color;
     }
 }

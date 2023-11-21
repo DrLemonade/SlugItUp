@@ -50,43 +50,13 @@ public class SubmissionTable : ApplianceController
         water.SetActive(!requiredSlug.getIsDry());
 
         label.SetActive(false);
-
-        Debug.Log("Wanted slug: " + Slug.getSlugFullName(requiredSlug));
     }
 
     void FixedUpdate()
     {
         transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y - Z_CONSTANT);
 
-        // Friction
-        if (rb.velocity.x > 0) // Friction x pos and right velocity
-        {
-            if (rb.velocity.x < FRICTION_CONSTANT)
-                rb.velocity = new Vector2(0, rb.velocity.y);
-            else
-                rb.velocity = new Vector2(rb.velocity.x - FRICTION_CONSTANT, rb.velocity.y);
-        }
-        if (rb.velocity.y > 0) // Friction y pos and backward velocity
-        {
-            if (rb.velocity.y < FRICTION_CONSTANT)
-                rb.velocity = new Vector2(rb.velocity.x, 0);
-            else
-                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y - FRICTION_CONSTANT);
-        }
-        if (rb.velocity.x < 0) // Friction x neg and left velocity
-        {
-            if (rb.velocity.x > FRICTION_CONSTANT)
-                rb.velocity = new Vector2(0, rb.velocity.y);
-            else
-                rb.velocity = new Vector2(rb.velocity.x + FRICTION_CONSTANT, rb.velocity.y);
-        }
-        if (rb.velocity.y < 0) // Friction y neg and forward velocity
-        {
-            if (rb.velocity.y > FRICTION_CONSTANT)
-                rb.velocity = new Vector2(rb.velocity.x, 0);
-            else
-                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + FRICTION_CONSTANT);
-        }
+        rb.velocity *= FRICTION_CONSTANT;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -99,6 +69,9 @@ public class SubmissionTable : ApplianceController
                 player.addScore(-1);
             locked = true;
         }
+
+        if (collision.gameObject.CompareTag("Collector"))
+            label.SetActive(true);
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -111,6 +84,9 @@ public class SubmissionTable : ApplianceController
                 player.addScore(1);
             locked = false;
         }
+
+        if (collision.gameObject.CompareTag("Collector"))
+            label.SetActive(false);
     }
 
     public override bool insertSlug(Slug slug) 

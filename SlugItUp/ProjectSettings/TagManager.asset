@@ -11,6 +11,7 @@ TagManager:
   - Collector
   - Trash
   - submissionZone
+  - Slug
   layers:
   - Default
   - TransparentFX

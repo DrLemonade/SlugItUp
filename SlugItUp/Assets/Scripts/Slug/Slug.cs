@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Slug
 {
-    // Constants
+
+    // // Constants
     public static readonly int RED = 0b001;
     public static readonly int GREEN = 0b010;
     public static readonly int BLUE = 0b100;

@@ -14,9 +14,10 @@ GameObject:
   - component: {fileID: 3613697417638751513}
   - component: {fileID: 3613697417638751514}
   - component: {fileID: -1474600621309722658}
+  - component: {fileID: -1011004330059723895}
   m_Layer: 0
   m_Name: Slug
-  m_TagString: Untagged
+  m_TagString: Slug
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29,8 +30,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3613697417638751517}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.4793, y: 1.4411, z: 0}
-  m_LocalScale: {x: 0.13361277, y: 0.13361277, z: 0.13361277}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.13, y: 0.13, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -137,16 +138,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f056378f39ab6a942b44c760ec53c617, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FRICTION_CONSTANT: 0.85
-  DROP_DELTA: 0.5
-  rb: {fileID: 3613697417638751513}
-  player: {fileID: 0}
-  spriteRenderer: {fileID: 3613697417638751519}
-  slugSpriteF: {fileID: 941386008, guid: 2e346981d069444dfb8d4fe34580526b, type: 3}
-  slugSpriteR: {fileID: -1715901032, guid: 2e346981d069444dfb8d4fe34580526b, type: 3}
-  slugSpriteB: {fileID: 102755570, guid: 2e346981d069444dfb8d4fe34580526b, type: 3}
   slugSpriteL: {fileID: 1836484183, guid: 2e346981d069444dfb8d4fe34580526b, type: 3}
-  waterDrop: {fileID: 8011947153194766888, guid: f858d7f23fe61f4459cd3ecf0ba94fe6, type: 3}
+  slugSpriteR: {fileID: -1715901032, guid: 2e346981d069444dfb8d4fe34580526b, type: 3}
+  slugSpriteF: {fileID: 941386008, guid: 2e346981d069444dfb8d4fe34580526b, type: 3}
+  slugSpriteB: {fileID: 102755570, guid: 2e346981d069444dfb8d4fe34580526b, type: 3}
+  FRICTION_CONSTANT: 0.85
+  player: {fileID: 0}
 --- !u!82 &-1474600621309722658
 AudioSource:
   m_ObjectHideFlags: 0
@@ -243,3 +240,17 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-1011004330059723895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3613697417638751517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e91fb5cdba144530a1dc3587c9c0c5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dropDeltaTime: 0.25
+  waterDropPrefab: {fileID: 8011947153194766888, guid: f858d7f23fe61f4459cd3ecf0ba94fe6, type: 3}

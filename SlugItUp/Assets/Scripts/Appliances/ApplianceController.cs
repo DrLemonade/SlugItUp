@@ -38,4 +38,14 @@ public abstract class ApplianceController : MonoBehaviour
         return (startTime != 0) && (Time.time - startTime >= applianceTimer);
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Slug"))
+        {
+            bool success = insertSlug(collision.GetComponentInParent<SlugController>().getSlug());
+            if (success)
+                Destroy(collision.gameObject);
+        }
+    }
+
 }

@@ -14,7 +14,7 @@ public class BarrelHandler : MonoBehaviour
     {
         displayCircle.GetComponentInParent<SpriteRenderer>().color = new Vector4(0, 0, 0, 0);
         
-        newestBarrel = Instantiate(barrelPrefab);
+        newestBarrel = Instantiate(barrelPrefab, transform);
         newestBarrel.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);
         newestBarrel.GetComponentInParent<SubmissionTable>().player = player.GetComponentInParent<PlayerController>();
     }
@@ -22,7 +22,7 @@ public class BarrelHandler : MonoBehaviour
     void Update()
     {
         if (newestBarrel.GetComponentInParent<SubmissionTable>().isInsideSubmissionZone()) {
-            newestBarrel = Instantiate(barrelPrefab);
+            newestBarrel = Instantiate(barrelPrefab, transform);
             newestBarrel.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);
             newestBarrel.GetComponentInParent<SubmissionTable>().player = player.GetComponentInParent<PlayerController>();
         }
